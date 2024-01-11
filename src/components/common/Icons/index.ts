@@ -1,0 +1,13 @@
+export { default as Logo } from "./Logo";
+export { default as IconClose } from "./IconClose";
+export { default as IconSearch } from "./IconSearch";
+export { default as IconPrev } from "./IconPrev";
+export { default as IconNext } from "./IconNext";
+export { default as IconArrowRight } from "./IconArrowRight";
+export { default as IconArrowUp } from "./IconArrowUp";
+export { default as IconTwitter } from "./IconTwitter";
+export { default as IconFacebook } from "./IconFacebook";
+export { default as IconInstagram } from "./IconInstagram";
+export { default as IconYoutube } from "./IconYoutube";
+export { default as IconLinkedin } from "./IconLinkedin";
+export { default as IconPinterest } from "./IconPinterest";

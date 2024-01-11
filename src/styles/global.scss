@@ -1,0 +1,269 @@
+@import "./_mixins.scss";
+
+.pointer {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+button:focus {
+  outline: none !important;
+}
+
+.image-hover {
+  overflow: hidden;
+
+  div,
+  div:hover,
+  a,
+  a:hover {
+    overflow: hidden;
+    border-radius: 5px;
+  }
+}
+
+.image-hover img,
+.image-hover .thumb-title {
+  transform: scale(1);
+  transition: 0.4s ease-in-out;
+}
+
+.image-hover:hover img {
+  transform: scale(1.15);
+  opacity: 0.8;
+  border-radius: 5px;
+}
+
+.btn-hover {
+  @include transition(all 0.5s);
+  color: rgba(255, 255, 255, 1);
+  position: relative;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0;
+    background-color: rgba(255, 255, 255, 0.4);
+    @include transition(all 0.3s);
+  }
+
+  &:hover::before {
+    opacity: 1;
+    width: 100%;
+  }
+}
+
+.is-blurred {
+  filter: blur(2px);
+  -webkit-filter: blur(2px);
+  opacity: 0.9;
+}
+
+.err-msg {
+  color: red;
+  margin-top: 5px;
+  font-size: 1.2rem;
+  text-align: right;
+  min-height: 18px;
+}
+
+html {
+  font-family: var(--font-sans);
+}
+
+.app-wrapper {
+  overflow-x: hidden;
+  overflow-y: hidden;
+  position: relative;
+}
+
+#__next-prerender-indicator {
+  display: none;
+}
+
+.hover-img {
+  overflow: hidden;
+
+  img {
+    transform: scale(1);
+    transition: 0.3s ease-in-out;
+  }
+
+  &:hover img {
+    transform: scale(1.1) rotate(2deg);
+  }
+}
+
+.hover-raise {
+  &:hover {
+    box-shadow: 0 0.5em 0.5em -0.4em #1e5c34;
+    transition: all 0.25s !important;
+    transform: translateY(-0.25em) !important;
+  }
+}
+
+.hover-scale {
+  transition: 0.2s ease-in-out 0s;
+
+  &:hover {
+    z-index: 2;
+    transform: scale(1.1) !important;
+  }
+}
+
+.hover-slide {
+  position: relative;
+  cursor: pointer;
+
+  &::after {
+    content: "";
+    border-radius: 6px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: width 0.3s;
+    background-color: rgba(255, 255, 255, 0.4);
+    height: 100%;
+    width: 0;
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+}
+
+.hover-slide-purple {
+  position: relative;
+  cursor: pointer;
+
+  &::after {
+    content: "";
+    border-radius: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: width 0.3s ease-in;
+    @apply bg-purple-400;
+    height: 100%;
+    width: 0;
+    z-index: -1;
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+}
+
+.blur-1x {
+  -webkit-filter: blur(1px);
+  -o-filter: blur(1px);
+  -moz-filter: blur(1px);
+  filter: blur(1px);
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  /* autoprefixer: off */
+  -moz-box-orient: vertical;
+  -webkit-box-orient: vertical;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  /* autoprefixer: off */
+  -moz-box-orient: vertical;
+  -webkit-box-orient: vertical;
+}
+
+.transition-h {
+  overflow: hidden;
+  transition: all 0.35s ease;
+}
+
+.flex-center {
+  @apply flex justify-center items-center;
+}
+
+.flex-between {
+  @apply flex justify-between items-center;
+}
+
+.medium {
+  font-weight: 600;
+}
+
+a {
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.embla {
+  @apply overflow-hidden;
+}
+
+.embla__container {
+  @apply flex;
+}
+
+@media (min-width: 1024px) {
+  .ml {
+    margin-left: max(0px, (100% - 1476px)/2);
+
+  }
+}
+
+.wr {
+  width: calc(50% + max(0px, (100% - 1476px)/2));
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+select,
+option.selected {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.gm-style-iw-tc {
+  display: none;
+}
+
+.gm-style .gm-style-iw-c {
+  padding: 0px;
+  border-radius: 0px;
+}
+
+.gm-ui-hover-effect {
+  background: white !important;
+  opacity: 1;
+}
+
+.gm-style .gm-style-iw-d {
+  overflow: auto !important;
+  max-height: none !important;
+}

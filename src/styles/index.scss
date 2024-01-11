@@ -1,0 +1,9 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@import './keyframe.scss';
+@import './_mixins.scss';
+
+@import 'component/header.scss';
+@import 'component/progress.scss';

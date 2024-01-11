@@ -1,0 +1,24 @@
+service: the-exploration-company-frontend
+
+plugins:
+  - serverless-lift
+
+provider:
+  name: aws
+  region: ${opt:region, self:custom.defaultRegion}
+  environment:
+    SERVICE: ${self:service}
+    STAGE: ${opt:stage, self:custom.defaultStage}
+
+custom:
+  defaultRegion: eu-central-1
+  defaultStage: dev
+
+constructs:
+  landing:
+    type: single-page-app
+    path: out
+    extensions:
+      bucket:
+        Properties:
+          BucketName: ${self:service}-${opt:stage}

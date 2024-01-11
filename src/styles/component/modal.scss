@@ -1,0 +1,20 @@
+.modal-wrapper {
+  .ant-modal-content {
+    @apply rounded-lg text-black;
+  }
+  .ant-modal-header {
+    @apply relative rounded-tl-lg rounded-tr-lg;
+  }
+  .ant-modal-title {
+    @apply text-center text-lg text-primary-green;
+    font-family: var(--font-bold);
+  }
+ 
+  .ant-modal-footer {
+    @apply flex justify-center space-x-10;
+    button {
+      min-width: 30%;
+      border-radius: 4px;
+    }
+  }
+}
