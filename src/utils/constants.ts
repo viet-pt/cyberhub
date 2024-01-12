@@ -5,3 +5,9 @@ export const PROVINCES = [
   { value: '59', label: 'TP HCM' },
   { value: '55', label: 'Đà Nẵng' },
 ]
+
+export const ROUTE = {
+  NEWS: '/',
+  QUIZ: '/quiz',
+  SEARCH: '/search',
+}

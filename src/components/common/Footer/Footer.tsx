@@ -1,4 +1,3 @@
-import { Logo } from "@common/Icons";
 import Link from "next/link";
 import React from "react";
 
@@ -23,14 +22,8 @@ const Footer = () => {
           <div className="text-base lg:text-2xl">
             UK 012 3456 789
           </div>
-          <div className="flex w-full my-16 items-center justify-center lg:hidden">
-            <Logo className="w-[102px] text-dark-green" alt="partners" />
-          </div>
+          
           <div className="uppercase lg:text-right text-xs lg:text-13">
-            <Link href="/">Partners</Link>
-            <br />
-            <br />
-            <br />
             <Link href="/privacy">Privacy</Link>
             <br />
             <Link href="/information">Useful Information</Link>

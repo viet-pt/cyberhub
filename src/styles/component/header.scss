@@ -28,16 +28,15 @@
 		box-shadow: 0px 3px 6px #00000029;
 	}
 	.nav-item {
-		font-size: 15px;
-		font-family: var(--font-medium);
+		font-weight: 600;
 		display: block;
 		cursor: pointer;
 		&::after {
 			content: '';
 			display: block;
 			width: 0;
-			height: 2px;
-			background: #fff;
+			height: 1px;
+			background: #444444;
 			transition: width .3s;
 		}
 		&:hover::after {
@@ -58,7 +57,7 @@
 			width: 27px;
 			height: 3px;
 			border-radius: 30px;
-			background: #fff;
+			background: #444444;
 			transition: 0.3s;
 			position: absolute;
 			box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.101);
@@ -82,21 +81,22 @@
 	&__menu {
 		position: relative;
 		width: 100vw;
-		height: 100vh;
+		height: 20vh;
 		color: #000;
 		background-color: #fff;
-		transform: translate(-105%);
+		transform: translateY(-150%);
 		box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 		position: absolute;
 		top: 54px;
 		left: 0;
 		z-index: 20;
 		transition: all .4s;
+		z-index: -1;
 	}
 
 	&.open-menu {
 		.header__menu {
-			transform: translateX(0);
+			transform: translateY(0);
 		}
 		.header__close-btn {
 			div {
@@ -115,6 +115,10 @@
 			}
 		}
 	}
+}
+
+.transition-seach {
+	transition: width 0.3s ease 0s;
 }
 
 .animated {

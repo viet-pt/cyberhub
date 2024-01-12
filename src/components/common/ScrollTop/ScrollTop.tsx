@@ -1,5 +1,5 @@
-import React from 'react';
 import { IconArrowUp } from '@common/Icons';
+import React from 'react';
 
 class ScrollTop extends React.PureComponent {
   state = {
@@ -33,7 +33,7 @@ class ScrollTop extends React.PureComponent {
   render() {
     const { showButton } = this.state;
     return (
-      <div className={`transition-all ease-out fixed bottom-3 right-6 pointer bg-primary-green z-50
+      <div className={`transition-all ease-out fixed bottom-3 right-6 pointer bg-primary-orange z-50
         rounded-full h-10 w-10 flex-center shadow-md ${showButton ? 'visible ease-in bottom-6' : 'invisible'}`} onClick={this.goToTop}>
         <IconArrowUp
           className="p-2 w-9 h-auto text-white"
