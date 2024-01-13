@@ -26,8 +26,10 @@ module.exports = {
         "primary-gray": "#F8F6F3",
         "second-gray": "#A0A0A0",
         "primary-orange": "#F89A3E",
-        "primary-yellow": "#FED45C",
+        "primary-blue": "#0066cc",
+        "primary-yellow": "#ffde76",
         "primary-black": "#444444",
+        "second-black": "#333333",
       },
       outline: {
         blue: "2px solid rgba(0, 112, 244, 0.5)",
@@ -76,9 +78,6 @@ module.exports = {
       minWidth: {
         "1/3": "33.3%",
         "1/2": "50%",
-      },
-      zIndex: {
-        1: "1",
       },
       container: {
         center: true,

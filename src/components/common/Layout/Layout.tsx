@@ -62,7 +62,9 @@ export default function Layout({ title, children, video, image, description, can
 
       <main className='relative text-sm'>
         <Header />
-        {children}
+        <div className='mt-16 lg:mt-0'>
+          {children}
+        </div>
         <Footer />
       </main>
       <Loading />

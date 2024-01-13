@@ -94,7 +94,7 @@ const Header = () => {
               </div>
 
               <div className='flex items-center justify-end space-x-10 text-base medium'>
-                <Link href={ROUTE.NEWS} className={cn(`flex-center border border-solid border-gray-300 py-1 px-3 rounded-20 
+                <Link href={ROUTE.NEWS} data-aos="fade-right" className={cn(`flex-center border border-solid border-gray-300 py-1 px-3 rounded-20 
                   hover:no-underline hover:bg-primary-orange hover:text-white group`, { 'bg-primary-orange text-white': path === 'NEWS' })}>
                   <Image
                     alt='news'
@@ -104,7 +104,7 @@ const Header = () => {
                   />
                   <span className='ml-2'>News</span>
                 </Link>
-                <Link href={ROUTE.QUIZ} className={cn(`flex-center border border-solid border-gray-300 py-1 px-3 rounded-20 
+                <Link href={ROUTE.QUIZ} data-aos="fade-left" className={cn(`flex-center border border-solid border-gray-300 py-1 px-3 rounded-20 
                   hover:no-underline hover:bg-primary-orange hover:text-white group`, { 'bg-primary-orange text-white': path === 'QUIZ' })}>
                   <Image
                     alt='news'

@@ -26,6 +26,7 @@
 	&.fixed-header {
 		animation: slide-down 0.7s;
 		position: fixed;
+		top: 0;
 	}
 	.nav-item {
 		font-weight: 600;

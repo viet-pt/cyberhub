@@ -221,16 +221,6 @@ a {
   @apply flex;
 }
 
-@media (min-width: 1024px) {
-  .ml {
-    margin-left: max(0px, (100% - 1476px)/2);
-
-  }
-}
-
-.wr {
-  width: calc(50% + max(0px, (100% - 1476px)/2));
-}
 
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
@@ -242,28 +232,36 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
-select,
-option.selected {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.hover-news {
+  img {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    transition: .3s ease-in-out;
+  }
+  &:hover img {
+    -webkit-transform: scale(1.1) rotate(2deg);
+    transform: scale(1.1) rotate(2deg);
+  }
 }
 
-.gm-style-iw-tc {
-  display: none;
-}
+.title {
+  display: inline-block;
+  position: relative;
+  padding: 0 15px 0 20px;
+  margin: 6px 0 4px 0;
 
-.gm-style .gm-style-iw-c {
-  padding: 0px;
-  border-radius: 0px;
-}
-
-.gm-ui-hover-effect {
-  background: white !important;
-  opacity: 1;
-}
-
-.gm-style .gm-style-iw-d {
-  overflow: auto !important;
-  max-height: none !important;
+  &::before {
+    content: '';
+    position: absolute;
+    width: 5px;
+    left: 5px;
+    top: 8px;
+    bottom: 5px;
+    -webkit-transform: skew(-20deg);
+    -khtml-transform: skew(-20deg);
+    -moz-transform: skew(-20deg);
+    -o-transform: skew(-20deg);
+    transform: skew(-20deg);
+    background-color: #dd3333;
+  }
 }

@@ -5,7 +5,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { PROVINCES } from "utils/constants";
 import { REGEX_NUMBER } from "utils/regex";
 import useTrans from "utils/useTrans";
 import * as yup from "yup";
@@ -104,7 +103,7 @@ const Configurator = ({ data }) => {
                     label="Chọn tỉnh thành"
                     value={value}
                     onChange={({ value }) => { onChange(value); changeProvince(value) }}
-                    list={PROVINCES}
+                    list={[]}
                     error={errors.province}
                   />
                 )}
