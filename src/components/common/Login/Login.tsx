@@ -1,0 +1,63 @@
+import Modal from "@common/Modal/Modal";
+import { Google_ID } from "api/_config";
+import Image from "next/image";
+import React from "react";
+import GoogleLogin from "react-google-login";
+import { toast } from "react-toastify";
+import { useUserStore } from "store/storeUser";
+import Cookies from "universal-cookie";
+import { storageKey } from "utils/storageKey";
+
+const cookies = new Cookies();
+const dd = 1 * 86400 * 1000;
+const d = new Date();
+
+const Login = ({ visible, closeModal }) => {
+  const [updateHeaderStore] = useUserStore((state) => [state.addUserInfo])
+
+  const handleLoginGoogle = (response) => {
+    console.log(22222, response);
+    toast.success("Đăng nhập thành công!");
+    d.setTime(d.getTime() + dd);
+    const { googleId, profileObj, accessToken } = response;
+    cookies.set(storageKey.ACCESS_TOKEN, accessToken, { path: '/', expires: d });
+    cookies.set(storageKey.PROFILE, JSON.stringify(profileObj), { path: '/', expires: d });
+    // localStorage.setItem(storageKey.PROFILE, JSON.stringify(profileObj));
+    updateHeaderStore(profileObj);
+    closeModal();
+  }
+
+  return (
+    <Modal
+      visible={visible}
+      closeModal={closeModal}
+      title="Đăng nhập"
+      content={
+        <div className="py-4 flex-center">
+          <GoogleLogin
+            clientId={Google_ID}
+            render={renderProps => (
+              <div className="rounded-md p-1 text-center bg-[#3f7fec] text-white flex items-center lg:w-3/5 font-medium pointer group"
+                onClick={renderProps.onClick}>
+                <div className="rounded-md bg-white w-12 h-12 p-2 mr-8 group-hover:animate-ringring">
+                  <Image
+                    alt='google'
+                    src='/imgs/G.png'
+                    className='h-8 w-auto'
+                    width={0} height={0}
+                  />
+                </div>
+                <p className="mr-4">Đăng nhập với Google</p>
+              </div>
+            )}
+            buttonText="Login"
+            onSuccess={handleLoginGoogle}
+            cookiePolicy={'single_host_origin'}
+          />
+        </div>
+      }
+    />
+  )
+}
+
+export default React.memo(Login);

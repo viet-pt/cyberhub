@@ -1,7 +1,7 @@
-import React, { Fragment } from 'react';
+import { IconClose } from '@common/Icons';
 import { Dialog, Transition } from '@headlessui/react';
 import cn from 'clsx';
-import { IconClose } from '@common/Icons';
+import React, { Fragment } from 'react';
 import useTrans from 'utils/useTrans';
 
 interface IProps {
@@ -16,7 +16,7 @@ interface IProps {
   confirmAction?: any;
 };
 
-const Modal = ({ visible, title, content, closeButton = "IDS_CANCEL",
+const Modal = ({ visible, title, content, closeButton,
   confirmButton, closeModal, confirmAction, size, className }: IProps) => {
   const i18n = useTrans();
 
@@ -46,9 +46,9 @@ const Modal = ({ visible, title, content, closeButton = "IDS_CANCEL",
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className={cn(`w-full relative transform overflow-hidden rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all`,
+              <Dialog.Panel className={cn(`w-full relative transform overflow-hidden rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all font-sans`,
                 size === "xl" ? 'max-w-6xl' : size === "lg" ? 'max-w-3xl' : 'max-w-lg')}>
-                <Dialog.Title as="h3" className="text-lg medium leading-6 text-gray-900">
+                <Dialog.Title as="h3" className="text-lg medium leading-6 text-gray-900 text-center">
                   {title}
                 </Dialog.Title>
 

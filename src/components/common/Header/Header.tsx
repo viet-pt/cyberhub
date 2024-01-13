@@ -1,11 +1,17 @@
-import { IconSearch } from '@common/Icons';
+import { IconLogout, IconSearch, IconUser } from '@common/Icons';
+import Login from '@common/Login/Login';
 import OutsideClick from '@common/OutsideClick/OutsideClick';
 import cn from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
 import Router, { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { useUserStore } from 'store/storeUser';
+import Cookies from 'universal-cookie';
 import { ROUTE } from 'utils/constants';
+import { storageKey } from 'utils/storageKey';
+
+const cookies = new Cookies();
 
 const Header = () => {
   const [fixedHeader, setFixedHeader] = useState(false);
@@ -16,6 +22,8 @@ const Header = () => {
   const [txtSearch, setTxtSearch] = useState('');
   const [openModalLogin, setOpenModalLogin] = useState(false);
   const { pathname } = useRouter();
+
+  const [authorized, userStore, removeUserStore] = useUserStore((state) => [state.authorized, state.data, state.removeUserInfo])
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -43,6 +51,13 @@ const Header = () => {
 
   const onLogin = () => {
     setOpenModalLogin(true);
+  }
+
+  const onLogout = () => {
+    removeUserStore();
+    localStorage.clear();
+    cookies.remove(storageKey.ACCESS_TOKEN);
+    cookies.remove(storageKey.PROFILE);
   }
 
   const handleKeyDown = (event) => {
@@ -74,7 +89,7 @@ const Header = () => {
               <div className="lg:w-2/5">
                 <Link href='/' className='flex items-center hover:no-underline'>
                   <img src="/imgs/logo.png" className='h-14 w-auto' alt="logo" />
-                  <h1 className="medium text-3xl mb-0 ml-3">CyberHub</h1>
+                  <h1 className="text-3xl mb-0 ml-3 font-apoc font-bold">CyberHub</h1>
                 </Link>
               </div>
 
@@ -117,8 +132,28 @@ const Header = () => {
                 {!showSearch &&
                   <IconSearch className='h-5 pointer hover-scale' onClick={() => setShowSearch(true)} />
                 }
-                <span className='text-right border-l border-solid border-gray-300 ml-5 pl-5 nav-item' onClick={onLogin}>
-                  Đăng nhập</span>
+                {authorized ?
+                  <div className='group relative py-2'>
+                    <Image
+                      alt='avatar'
+                      src={userStore.imageUrl}
+                      className='h-11 w-auto ml-5 rounded-full pointer'
+                      width={0} height={0}
+                    />
+                    <div className='bg-white shadow-7 rounded-md py-1 text-sm w-40 hidden hover:block group-hover:block absolute -bottom-[72px] -right-5 z-50'>
+                      <Link href={ROUTE.PROFILE} className='flex space-x-3 px-5 py-2 hover:bg-slate-100 pointer hover:no-underline'>
+                        <IconUser className='text-primary-black w-5' />
+                        <span>Profile</span>
+                      </Link>
+                      <div onClick={onLogout} className='flex space-x-3 px-5 py-2 hover:bg-slate-100 pointer hover:no-underline'>
+                        <IconLogout className='text-primary-black w-5' />
+                        <span>Đăng xuất</span>
+                      </div>
+                    </div>
+                  </div> :
+                  <span className='text-right border-l border-solid border-gray-300 ml-5 pl-5 nav-item' onClick={onLogin}>
+                    Đăng nhập</span>
+                }
               </div>
             </div>
           </div>
@@ -151,8 +186,28 @@ const Header = () => {
               {!showSearchMobile &&
                 <>
                   <IconSearch className='h-4 pointer hover-scale' onClick={() => setShowSearchMobile(true)} />
-                  <span className='text-right border-l border-solid border-gray-300 ml-2 pl-2 nav-item' onClick={onLogin}>
-                    Đăng nhập</span>
+                  {authorized ?
+                    <div className='group relative py-1'>
+                      <Image
+                        alt='avatar'
+                        src={userStore.imageUrl}
+                        className='h-8 w-auto ml-3 rounded-full'
+                        width={0} height={0}
+                      />
+                      <div className='bg-white shadow-7 rounded-md py-1 text-sm w-36 hidden hover:block group-hover:block absolute -bottom-[80px] -right-2 z-50'>
+                        <Link href={ROUTE.PROFILE} className='flex space-x-3 px-5 py-2 hover:bg-slate-100 pointer hover:no-underline'>
+                          <IconUser className='text-primary-black w-5' />
+                          <span>Profile</span>
+                        </Link>
+                        <div onClick={onLogout} className='flex space-x-3 px-5 py-2 hover:bg-slate-100 pointer hover:no-underline'>
+                          <IconLogout className='text-primary-black w-5' />
+                          <span>Đăng xuất</span>
+                        </div>
+                      </div>
+                    </div> :
+                    <span className='text-right border-l border-solid border-gray-300 ml-2 pl-2 nav-item' onClick={onLogin}>
+                      Đăng nhập</span>
+                  }
                 </>
               }
             </div>
@@ -184,6 +239,11 @@ const Header = () => {
           </div>
         </div>
       </section>
+
+      <Login
+        visible={openModalLogin}
+        closeModal={() => setOpenModalLogin(false)}
+      />
     </>
   );
 };

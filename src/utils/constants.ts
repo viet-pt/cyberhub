@@ -10,4 +10,5 @@ export const ROUTE = {
   NEWS: '/',
   QUIZ: '/quiz',
   SEARCH: '/search',
+  PROFILE: '/profile',
 }

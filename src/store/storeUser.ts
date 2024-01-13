@@ -1,5 +1,6 @@
-import { create } from 'zustand';
 import Cookies from 'universal-cookie';
+import { storageKey } from 'utils/storageKey';
+import { create } from 'zustand';
 const cookies = new Cookies();
 
 interface IUser {
@@ -10,7 +11,7 @@ interface IUser {
 }
 
 const initialState = {
-  authorized: cookies.get('token') ? true : false,
+  authorized: cookies.get(storageKey.ACCESS_TOKEN) ? true : false,
   data: null,
 };
 

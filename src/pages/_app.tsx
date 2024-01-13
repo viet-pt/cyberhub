@@ -1,14 +1,19 @@
-import { useEffect } from "react";
+import Layout from "@common/Layout/Layout";
+import Aos from "aos";
+import clsx from "clsx";
 import App from "next/app";
 import localFont from "next/font/local";
-import clsx from "clsx";
-import Aos from "aos";
-import Layout from "@common/Layout/Layout";
+import { useEffect } from "react";
 
-import "styles/global.scss";
-import "styles/index.scss";
 import "aos/dist/aos.css";
 import "react-toastify/dist/ReactToastify.css";
+import { useUserStore } from "store/storeUser";
+import "styles/global.scss";
+import "styles/index.scss";
+import Cookies from "universal-cookie";
+import { storageKey } from "utils/storageKey";
+
+const cookies = new Cookies();
 
 const openSans = localFont({
   src: [
@@ -49,12 +54,23 @@ const apoc = localFont({
 
 const MyApp = ({ Component, pageProps }: any) => {
   const getLayout = Component.getLayout || (page => (
-      <Layout {...pageProps}>{page}</Layout>
-    ));
+    <Layout {...pageProps}>{page}</Layout>
+  ));
+  const [updateHeaderStore] = useUserStore((state) => [state.addUserInfo]);
 
   useEffect(() => {
     Aos.init({ duration: 1500, once: true });
+    checkToken();
   }, []);
+
+  const checkToken = () => {
+    // call api check token
+    const profile = cookies.get(storageKey.PROFILE);
+    console.log(3333, profile);
+    if (profile) {
+      updateHeaderStore(profile);
+    }
+  }
 
   return (
     <main className={clsx(openSans.variable, apoc.variable, "font-sans")}>

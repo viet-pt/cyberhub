@@ -1,13 +1,13 @@
-import About from "components/page/About/About";
+import Search from "components/page/Search/Search";
 
 const search = (props) => {
-  return <About {...props} />;
+  return <Search {...props} />;
 };
 
 export async function getServerSideProps() {
   return {
     props: {
-      title: "search",
+      title: "Tìm kiếm",
     },
   };
 }

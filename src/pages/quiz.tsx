@@ -1,13 +1,13 @@
-import About from "components/page/About/About";
+import Quiz from "components/page/Quiz/Quiz";
 
 const quiz = (props) => {
-  return <About {...props} />;
+  return <Quiz {...props} />;
 };
 
 export async function getServerSideProps() {
   return {
     props: {
-      title: "About",
+      title: "CyberHub - Quiz",
     },
   };
 }

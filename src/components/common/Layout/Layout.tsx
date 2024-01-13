@@ -1,12 +1,14 @@
 import { NextSeo } from 'next-seo';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { ReactNode, useRef } from 'react';
+import { ReactNode } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { AppConfig } from 'utils/AppConfig';
 import Footer from '../Footer/Footer';
-import Header from '../Header/Header';
 import Loading from '../Loading/Loading';
 import ScrollTop from '../ScrollTop/ScrollTop';
+
+const Header = dynamic(() => import('../Header/Header'), { ssr: false })
 
 interface ILayoutProps {
   title?: string;
@@ -19,8 +21,6 @@ interface ILayoutProps {
 };
 
 export default function Layout({ title, children, video, image, description, canonical }: ILayoutProps) {
-  const headerRef: any = useRef(null);
-
   return (
     <div className="app-wrapper">
       <Head>

@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { toast } from "react-toastify";
-import InputForm from "@common/InputForm/InputForm";
 import Dropdown from "@common/Dropdown/Dropdown";
+import InputForm from "@common/InputForm/InputForm";
+import Modal from "@common/Modal/Modal";
+import { yupResolver } from "@hookform/resolvers/yup";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import { PROVINCES } from "utils/constants";
 import { REGEX_NUMBER } from "utils/regex";
-import Modal from "@common/Modal/Modal";
 import useTrans from "utils/useTrans";
+import * as yup from "yup";
 
 const FormSchema = yup.object().shape({
   name: yup.string().required("IDS_NAME_REQUIRED"),
