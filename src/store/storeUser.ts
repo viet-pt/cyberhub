@@ -12,7 +12,7 @@ interface IUser {
 
 const initialState = {
   authorized: cookies.get(storageKey.ACCESS_TOKEN) ? true : false,
-  data: null,
+  data: '',
 };
 
 export const useUserStore = create<IUser>((set) => ({
@@ -26,7 +26,7 @@ export const useUserStore = create<IUser>((set) => ({
   removeUserInfo: () => {
     set({
       authorized: false,
-      data: null,
+      data: '',
     })
   },
 }));

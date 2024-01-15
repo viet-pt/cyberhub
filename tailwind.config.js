@@ -37,6 +37,7 @@ module.exports = {
       fontFamily: {
         sans: ["var(--font-sans)"],
         apoc: ["var(--font-apoc)"],
+        roboto: ["var(--font-roboto)"],
       },
       fontSize: {
         13: ["13px", { lineHeight: "1.5" }],

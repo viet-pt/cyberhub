@@ -1,5 +1,5 @@
 export const storageKey = {
-  ACCESS_TOKEN: 'access_token',
+  ACCESS_TOKEN: 'cyber_token',
   PROFILE: 'profile',
   LANGUAGE: 'language',
 };

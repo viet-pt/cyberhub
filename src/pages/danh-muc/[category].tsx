@@ -1,8 +1,8 @@
 import { ArticleService } from "api/ArticleService";
-import Search from "components/page/Search/Search";
+import Category from "components/page/Category/Category";
 
-const search = (props) => {
-  return <Search {...props} />;
+const category = (props) => {
+  return <Category {...props} />;
 };
 
 async function getRelateList(q) {
@@ -12,17 +12,17 @@ async function getRelateList(q) {
 }
 
 export async function getServerSideProps(ctx) {
-  const { q } = ctx.query;
-  const data = await getRelateList(q);
+  const { category } = ctx.query;
+  const data = await getRelateList(category);
   
   return {
     props: {
-      title: `Tím kiếm từ khóa: ${q}`,
-      searchTxt: q,
+      title: category,
+      category,
       data,
     },
   };
 }
 
-export default search;
+export default category;
 

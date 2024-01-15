@@ -4,9 +4,9 @@ import React from "react";
 const Footer = () => {
 
   return (
-    <footer className="bg-primary-gray py-8 md:py-10">
+    <footer className="bg-primary-gray py-8 md:py-10 mt-12">
       <h3
-        className="text-center text-lg md:text-2xl medium"
+        className="text-center text-lg md:text-2xl medium font-apoc font-bold"
         style={{ color: "#223364" }}
       >
         CyberHub
@@ -20,19 +20,16 @@ const Footer = () => {
 
         <div className="flex flex-col lg:flex-row items-start justify-between pb-5 pt-5 lg:space-x-5">
           <div className="text-base lg:text-2xl">
-            UK 012 3456 789
+            <p className="mb-4">Nguyễn Hữu Cường</p>
+            <p className="mb-4">012 3456 789</p>
           </div>
           
-          <div className="uppercase lg:text-right text-xs lg:text-13">
-            <Link href="/privacy">Privacy</Link>
-            <br />
-            <Link href="/information">Useful Information</Link>
-            <br />
-            <Link href="/careers">Careers</Link>
-            <br />
-            <Link href="/privacy">Privacy Policy</Link>
-            <br />
-            <Link href="/terms">Terms and Conditions</Link>
+          <div className="uppercase lg:text-right text-xs lg:text-13 grid grid-cols-1">
+            <Link href="/" className="mb-2">Privacy</Link>
+            <Link href="/" className="mb-2">Useful Information</Link>
+            <Link href="/" className="mb-2">Careers</Link>
+            <Link href="/" className="mb-2">Privacy Policy</Link>
+            <Link href="/" className="mb-2">Terms and Conditions</Link>
           </div>
         </div>
       </div>

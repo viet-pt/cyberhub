@@ -129,3 +129,32 @@
 	animation-fill-mode: both;
 }
 
+@keyframes translate-right {
+	0% {
+		opacity: 0;
+		transform: translateX(30px);
+	} 
+	100% {
+		opacity: 1;
+		transform: translateX(0);
+	} 
+}
+
+@keyframes translate-left {
+	0% {
+		opacity: 0;
+		transform: translateX(-30px);
+	} 
+	100% {
+		opacity: 1;
+		transform: translateX(0);
+	} 
+}
+
+.animated-news {
+	animation: translate-left 0.8s;
+}
+
+.animated-quiz {
+	animation: translate-right 0.8s;
+}

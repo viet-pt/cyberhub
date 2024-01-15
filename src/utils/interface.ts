@@ -3,5 +3,6 @@ export interface IArticle {
   title: string;
   description: string;
   created: string;
-  category: string;
+  cateName: string;
+  content: string;
 }

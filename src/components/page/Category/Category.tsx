@@ -3,16 +3,14 @@ import React from "react";
 import { IArticle } from "utils/interface";
 
 interface Iprops {
-  searchTxt: string;
+  category: string;
   data: IArticle[];
 }
 
-const Search = ({ searchTxt, data }: Iprops) => {
+const Category = ({ category, data }: Iprops) => {
   return (
-    <div className="text-base container py-6 lg:py-8 lg:w-3/4 mx-auto mobile:px-2">
-      <h3 className="text-lg lg:text-3xl font-bold title mb-5">Tìm kiếm</h3>
-      <p>Từ khóa: <b>{searchTxt}</b></p>
-
+    <div className="text-base container py-6 lg:py-10 lg:w-3/4 mx-auto mobile:px-2">
+      <h3 className="text-lg lg:text-3xl font-bold mb-5 text-center border-b border-primary-black uppercase pb-3">{category}</h3>
       <div className="lg:w-3/5 mt-8">
         {data.map((item, index) => (
           <RelateArticle item={item} key={index} />
@@ -22,4 +20,4 @@ const Search = ({ searchTxt, data }: Iprops) => {
   );
 };
 
-export default React.memo(Search);
+export default React.memo(Category);

@@ -39,3 +39,9 @@ export function commaSeparateNumber (val) {
   }
   return val;
 }
+
+
+export function getLink(data) {
+  const title = changeAlias(data.title);
+  return `${title}-${data.id}`
+}

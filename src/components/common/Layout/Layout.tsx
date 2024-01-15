@@ -1,3 +1,4 @@
+import Subcribe from '@common/Subcribe/Subcribe';
 import { NextSeo } from 'next-seo';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -65,6 +66,7 @@ export default function Layout({ title, children, video, image, description, can
         <div className='mt-16 lg:mt-0'>
           {children}
         </div>
+        <Subcribe />
         <Footer />
       </main>
       <Loading />
