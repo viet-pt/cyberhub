@@ -6,6 +6,8 @@ export const ROUTE = {
   CATEGORY: '/danh-muc',
 }
 
+export const TITLE_ANS = ['A', 'B', 'C', 'D', 'E', 'F'];
+
 export const HOT_NEWS = [
   {
     id: '111',

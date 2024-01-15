@@ -4,10 +4,8 @@ import VerticalArticle from "@common/Article/VerticalArticle";
 import Slider from "@common/Slider";
 import Link from "next/link";
 import React, { useEffect } from "react";
-import { HOT_NEWS, ROUTE } from "utils/constants";
+import { ROUTE } from "utils/constants";
 import { replaceCate } from "utils/helpers";
-
-const hotList: any = HOT_NEWS;
 
 const Home = ({ hotNews, cateList }) => {
   useEffect(() => {

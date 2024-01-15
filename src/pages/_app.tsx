@@ -27,7 +27,6 @@ const MyApp = ({ Component, pageProps }: any) => {
   }, []);
 
   const checkToken = () => {
-    // call api check token
     const profile = cookies.get(storageKey.PROFILE);
     if (profile) {
       updateUserStore(profile);

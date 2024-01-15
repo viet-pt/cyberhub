@@ -1,3 +1,5 @@
+import QuizDetail from "@common/QuizDetail/QuizDetail";
+import { QuizService } from "api/QuizService";
 import cn from "clsx";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -10,13 +12,28 @@ const TYPE = {
 }
 
 const Quiz = () => {
-  const router = useRouter();
   const [type, setType] = useState<any>('');
+  const [questionList, setQuestionList] = useState<any>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const curentType = router.query.type;
     setType(curentType || '');
+    setQuestionList([]);
   }, [router.query])
+
+  const getQuestionList = () => {
+    const number = type === TYPE.RANDOM ? 1 : 10;
+    const params = {
+      cateName: '',
+      number
+    };
+    QuizService.getQuestionList({ params }, res => {
+      if (res?.length) {
+        setQuestionList(res);
+      }
+    })
+  }
 
   return (
     <div className="text-base relative pt-6 lg:pt-12 mb-28">
@@ -47,6 +64,22 @@ const Quiz = () => {
             <Link href={`${ROUTE.QUIZ}?type=${TYPE.TEST}`}
               className={cn(`border border-primary-orange py-1 w-40 font-semibold hover-raise text-lg hover:no-underline`,
                 type === TYPE.TEST ? 'bg-primary-orange text-white' : 'text-primary-orange')}>Bài thi</Link>
+          </div>
+
+          <div className="flex-center mt-16">
+            {!questionList.length &&
+              <button className="border-none bg-primary-red rounded-20 text-white py-1 w-40 font-semibold hover-raise text-lg"
+                onClick={getQuestionList}>
+                Kiểm tra
+              </button>
+            }
+            {questionList.length ?
+              <div className="lg:w-1/2">
+                {questionList.map((item, index) => (
+                  <QuizDetail key={index} data={item} index={index + 1} />
+                ))}
+              </div> : null
+            }
           </div>
         </section>
       }
