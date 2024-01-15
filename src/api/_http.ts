@@ -1,6 +1,7 @@
 import Axios from "axios";
-import Cookies from "universal-cookie";
 import { hideLoading, showLoading } from "store/storeLoading";
+import Cookies from "universal-cookie";
+import { storageKey } from "utils/storageKey";
 import { BACKEND_API } from "./_config";
 
 export const BASE_URL = `${BACKEND_API}/api`;
@@ -20,7 +21,7 @@ function getToken() {
   let token = "";
   if (isClient) {
     const cookies = new Cookies();
-    token = cookies.get("token");
+    token = cookies.get(storageKey.ACCESS_TOKEN);
   }
   return token;
 }

@@ -1,8 +1,8 @@
 export interface IArticle {
-  thumnail: string;
+  thumbnail: string;
   title: string;
   description: string;
-  created: string;
+  createTime: string;
   cateName: string;
   content: string;
 }

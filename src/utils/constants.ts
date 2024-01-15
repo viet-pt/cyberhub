@@ -9,7 +9,7 @@ export const ROUTE = {
 export const HOT_NEWS = [
   {
     id: '111',
-    thumnail: 'https://cdn.24h.com.vn/upload/1-2024/images/2024-01-15/255x170/adt1705291779-hieu4248-4403__anh_cat_3_2.jpg',
+    thumbnail: 'https://cdn.24h.com.vn/upload/1-2024/images/2024-01-15/255x170/adt1705291779-hieu4248-4403__anh_cat_3_2.jpg',
     title: "Đào Nhật Tân bung nở, nhiều người mua về chơi Tết sớm. Làng quất lớn nhất miền Trung 'cháy' hàng vụ Tết",
     description: 'Lợi dụng người dân sơ hở khi đi khám chữa bệnh, Loan cùng đồng bọn dà Lợi dụng người dân sơ hở khi đi khám chữa bệnh, Loan cùng đồng bọn dà Các tỷ phú Elon Musk, Bill Gates, Mark Zuckerberg, Warren Buffet đều chia sẻ thói quen đọc sách đã góp phần rất lớn vào thành công của mình.',
     created: 'Thứ bảy, 13/1/2024 21:40',
@@ -41,7 +41,7 @@ export const HOT_NEWS = [
   },
   {
     id: '222',
-    thumnail: 'https://photo.znews.vn/w210/Uploaded/sotnzt/2024_01_13/pal.jpg',
+    thumbnail: 'https://photo.znews.vn/w210/Uploaded/sotnzt/2024_01_13/pal.jpg',
     title: 'Chelsea vượt mặt Man Utd bằng bàn thắng gây tranh cãi Lợi dụng người dân sơ hở khi đi khám chữa bệnh, Loan cùng đồng bọn dàn cảnh va quệt để "móc túi, Loan cùng đồng bọn dàn cảnh va quệt để "móc túi',
     description: 'Lợi dụng người dân sơ hở khi đi khám chữa bệnh, Loan cùng đồng bọn dàn cảnh va quệt để "móc túi", lấy tài sản đem bán và chia nhau tiêu xài.',
     created: 'Thứ bảy, 13/1/2024 21:40',
@@ -49,7 +49,7 @@ export const HOT_NEWS = [
   },
   {
     id: '333',
-    thumnail: 'https://photo.znews.vn/w210/Uploaded/bpivpawv/2024_01_13/uc.jpg',
+    thumbnail: 'https://photo.znews.vn/w210/Uploaded/bpivpawv/2024_01_13/uc.jpg',
     title: 'Sai lầm của thủ môn giúp Australia chiến thắng',
     description: 'Lợi dụng người dân sơ hở khi đi khám chữa bệnh, Loan cùng đồng bọn dàn cảnh va quệt để "móc túi", lấy tài sản đem bán và chia nhau tiêu xài.',
     created: 'Thứ bảy, 13/1/2024 21:40',
@@ -57,7 +57,7 @@ export const HOT_NEWS = [
   },
   {
     id: '444',
-    thumnail: 'https://photo.znews.vn/w210/Uploaded/sotnzt/2024_01_13/pal.jpg',
+    thumbnail: 'https://photo.znews.vn/w210/Uploaded/sotnzt/2024_01_13/pal.jpg',
     title: 'Cho thôi chức Giám đốc Sở NN&PTNT chơi golf trong giờ hành chính',
     description: 'Lợi dụng người dân sơ hở khi đi khám chữa bệnh, Loan cùng đồng bọn dàn cảnh va quệt để "móc túi", lấy tài sản đem bán và chia nhau tiêu xài.',
     created: 'Thứ bảy, 13/1/2024 21:40',
@@ -65,7 +65,7 @@ export const HOT_NEWS = [
   },
   {
     id: '555',
-    thumnail: 'https://photo.znews.vn/w210/Uploaded/bpivpawv/2024_01_13/uc.jpg',
+    thumbnail: 'https://photo.znews.vn/w210/Uploaded/bpivpawv/2024_01_13/uc.jpg',
     title: 'Sai lầm của thủ môn giúp Australia chiến thắng. Cho thôi chức Giám đốc Sở NN & PTNT chơi golf trong giờ hành chính ',
     description: 'Lợi dụng người dân sơ hở khi đi khám chữa bệnh, Loan cùng đồng bọn dàn cảnh va quệt để "móc túi", lấy tài sản đem bán và chia nhau tiêu xài.',
     created: 'Thứ bảy, 13/1/2024 21:40',
@@ -73,7 +73,7 @@ export const HOT_NEWS = [
   },
   {
     id: '666',
-    thumnail: 'https://photo.znews.vn/w210/Uploaded/dqmblcvo/2024_01_04/Iconic_Japanese_Ramen_For_You_To_Savour_08_Tonkotsu_Ramen.jpg',
+    thumbnail: 'https://photo.znews.vn/w210/Uploaded/dqmblcvo/2024_01_04/Iconic_Japanese_Ramen_For_You_To_Savour_08_Tonkotsu_Ramen.jpg',
     title: 'Chelsea vượt mặt Man Utd bằng bàn thắng gây tranh cãi',
     description: 'Lợi dụng người dân sơ hở khi đi khám chữa bệnh, Loan cùng đồng bọn dàn cảnh va quệt để "móc túi", lấy tài sản đem bán và chia nhau tiêu xài.',
     created: 'Thứ bảy, 13/1/2024 21:40',
@@ -81,7 +81,7 @@ export const HOT_NEWS = [
   },
   {
     id: '777',
-    thumnail: 'https://photo.znews.vn/w210/Uploaded/bpivpawv/2024_01_13/uc.jpg',
+    thumbnail: 'https://photo.znews.vn/w210/Uploaded/bpivpawv/2024_01_13/uc.jpg',
     title: 'Sai lầm của thủ môn giúp Australia chiến thắng',
     description: 'Lợi dụng người dân sơ hở khi đi khám chữa bệnh, Loan cùng đồng bọn dàn cảnh va quệt để "móc túi", lấy tài sản đem bán và chia nhau tiêu xài.',
     created: 'Thứ bảy, 13/1/2024 21:40',
@@ -89,7 +89,7 @@ export const HOT_NEWS = [
   },
   {
     id: '888',
-    thumnail: 'https://photo.znews.vn/w210/Uploaded/sotnzt/2024_01_13/pal.jpg',
+    thumbnail: 'https://photo.znews.vn/w210/Uploaded/sotnzt/2024_01_13/pal.jpg',
     title: 'Chelsea vượt mặt Man Utd bằng bàn thắng gây tranh cãi',
     description: 'Lợi dụng người dân sơ hở khi đi khám chữa bệnh, Loan cùng đồng bọn dàn cảnh va quệt để "móc túi", lấy tài sản đem bán và chia nhau tiêu xài.',
     created: 'Thứ bảy, 13/1/2024 21:40',
@@ -97,7 +97,7 @@ export const HOT_NEWS = [
   },
   {
     id: '999',
-    thumnail: 'https://photo.znews.vn/w210/Uploaded/bpivpawv/2024_01_13/uc.jpg',
+    thumbnail: 'https://photo.znews.vn/w210/Uploaded/bpivpawv/2024_01_13/uc.jpg',
     title: 'Sai lầm của thủ môn giúp Australia chiến thắng',
     description: 'Lợi dụng người dân sơ hở khi đi khám chữa bệnh, Loan cùng đồng bọn dàn cảnh va quệt để "móc túi", lấy tài sản đem bán và chia nhau tiêu xài.',
     created: 'Thứ bảy, 13/1/2024 21:40',

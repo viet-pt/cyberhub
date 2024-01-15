@@ -5,14 +5,15 @@ const category = (props) => {
   return <Category {...props} />;
 };
 
-async function getRelateList(q) {
-  const data = { q };
-  const res = await ArticleService.getRelateList(data);
+async function getRelateList(cateName) {
+  const params = { cateName };
+  const res = await ArticleService.getNewsList({ params });
   return res;
 }
 
 export async function getServerSideProps(ctx) {
-  const { category } = ctx.query;
+  let { category } = ctx.query;
+  category = category.replace(/-/g, ' ');
   const data = await getRelateList(category);
   
   return {

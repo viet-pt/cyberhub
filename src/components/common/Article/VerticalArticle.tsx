@@ -16,7 +16,7 @@ const VerticalArticle = ({ item, className }: Iprops) => {
       <Link href={getLink(item)} className="col-span-2 overflow-hidden rounded font-bold">
         <Image
           alt={item.title}
-          src={item.thumnail}
+          src={item.thumbnail}
           className='w-full h-auto aspect-[3/2] rounded pointer'
           width={0} height={0}
         />

@@ -1,5 +1,6 @@
 import RelateArticle from "@common/Article/RelateArticle";
 import React from "react";
+import { convertTime } from "utils/helpers";
 import { IArticle } from "utils/interface";
 
 interface Iprops {
@@ -14,8 +15,8 @@ const News = ({ data, relateList }: Iprops) => {
       <h1 className="text-black font-semibold mt-3 mb-6 text-2xl lg:text-4xl">{data.title}</h1>
 
       <div className="lg:w-3/4">
-        <p className="text-gray-500 mb-4">{data.created}</p>
-        <p className="text-black mb-4">{data.description}</p>
+        <p className="text-gray-500 text-xs font-medium mb-4">{convertTime(data.createTime)}</p>
+        <p className="text-black mb-6 font-semibold">{data.description}</p>
         <div dangerouslySetInnerHTML={{ __html: data.content }} className="border-b pb-12"></div>
 
         <div className="2xl:w-4/5">

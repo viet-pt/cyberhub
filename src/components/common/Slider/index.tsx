@@ -33,7 +33,7 @@ const Slider = ({ data, className }: ISlider) => {
   return (
     <div className={clsx(className, "relative")}>
       <div className="embla" ref={emblaRef}>
-        <div className="embla__container -mx-2.5 md:-mx-10">
+        <div className="embla__container -mx-2.5 md:-mx-3">
           {data.map((item, index) => (
             <div
               className={clsx("w-1/2 md:w-1/3 lg:w-1/5 shrink-0 px-2.5 md:px-4")}

@@ -5,9 +5,9 @@ const search = (props) => {
   return <Search {...props} />;
 };
 
-async function getRelateList(q) {
-  const data = { q };
-  const res = await ArticleService.getRelateList(data);
+async function getRelateList(txtSearch) {
+  const params = { txtSearch };
+  const res = await ArticleService.getNewsList({ params });
   return res;
 }
 

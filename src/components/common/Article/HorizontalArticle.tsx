@@ -17,7 +17,7 @@ const HorizontalArticle = ({ item, className }: Iprops) => {
         <Link href={getLink(item)}>
           <Image
             alt={item.title}
-            src={item.thumnail}
+            src={item.thumbnail}
             className='w-full h-auto aspect-[5/3] rounded pointer'
             width={0} height={0}
           />

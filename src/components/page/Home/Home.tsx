@@ -4,10 +4,12 @@ import VerticalArticle from "@common/Article/VerticalArticle";
 import Slider from "@common/Slider";
 import Link from "next/link";
 import React, { useEffect } from "react";
-import { ROUTE } from "utils/constants";
-import { changeAlias } from "utils/helpers";
+import { HOT_NEWS, ROUTE } from "utils/constants";
+import { replaceCate } from "utils/helpers";
 
-const Home = ({ hotList }) => {
+const hotList: any = HOT_NEWS;
+
+const Home = ({ hotNews, cateList }) => {
   useEffect(() => {
 
   }, []);
@@ -17,8 +19,8 @@ const Home = ({ hotList }) => {
       <section className="container mobile:px-2">
         <div className="grid grid-cols-1 lg:grid-cols-7 gap-4 lg:gap-8">
           <div className="lg:col-span-2 order-last lg:order-none">
-            {hotList.length > 4 &&
-              hotList.map((item, index) => (
+            {hotNews.length > 4 &&
+              hotNews.map((item, index) => (
                 index >= 3 && index <= 7 &&
                 <VerticalArticle key={index} item={item} />
               ))
@@ -26,14 +28,14 @@ const Home = ({ hotList }) => {
           </div>
 
           <div className="lg:col-span-3 order-first lg:order-none">
-            {hotList[0] &&
-              <MainArticle item={hotList[0]} />
+            {hotNews[0] &&
+              <MainArticle item={hotNews[0]} />
             }
           </div>
 
           <div className="lg:col-span-2 grid grid-cols-2 lg:grid-cols-1 gap-4 lg:gap-0">
-            {hotList.length > 2 &&
-              hotList.map((item, index) => (
+            {hotNews.length > 2 &&
+              hotNews.map((item, index) => (
                 index > 0 && index < 3 &&
                 <HorizontalArticle key={index} item={item} />
               ))
@@ -42,42 +44,40 @@ const Home = ({ hotList }) => {
         </div>
       </section>
 
-      <section className="mt-10 bg-primary-yellow py-6" data-aos="fade-up">
-        <div className="container mobile:px-2">
-          <Link href={`${ROUTE.CATEGORY}/${changeAlias('MULTIMEDIA')}`}>
-            <h3 className="mb-6 font-bold text-2xl uppercase title">MULTIMEDIA</h3>
-          </Link>
-          <div className="grid lg:grid-cols-2 gap-5">
-            <MainArticle item={hotList[0]} />
-            <div className="grid grid-cols-2 gap-5">
-              {hotList.length > 1 &&
-                hotList.map((item, index) => (
-                  index > 0 && index < 5 &&
-                  <HorizontalArticle key={index} item={item} />
-                ))
-              }
+      {cateList?.length &&
+        <section className="mt-10 bg-primary-yellow py-6" data-aos="fade-up">
+          <div className="container mobile:px-2">
+            <Link href={`${ROUTE.CATEGORY}/${replaceCate(cateList[0].cateName)}`}>
+              <h3 className="mb-6 font-bold text-2xl uppercase title">{cateList[0].cateName}</h3>
+            </Link>
+            <div className="grid lg:grid-cols-2 gap-5">
+              <MainArticle item={cateList[0].data[0]} />
+              <div className="grid grid-cols-2 gap-5">
+                {cateList[0].data.length > 1 &&
+                  cateList[0].data.map((item, index) => (
+                    index > 0 && index < 5 &&
+                    <HorizontalArticle key={index} item={item} />
+                  ))
+                }
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      }
 
-      <section className="mt-12 mobile:px-2" data-aos="fade-left">
-        <div className="container">
-          <Link href={`${ROUTE.CATEGORY}/${changeAlias('KINH DOANH')}`} className="border-b border-gray-300 mb-8 block">
-            <h3 className="font-bold text-2xl uppercase title">KINH DOANH</h3>
-          </Link>
-          <Slider data={hotList} />
-        </div>
-      </section>
-
-      <section className="mt-8 mobile:px-2" data-aos="fade-right">
-        <div className="container">
-          <Link href={`${ROUTE.CATEGORY}/${changeAlias('Books')}`} className="border-b border-gray-300 mb-8 block">
-            <h3 className="font-bold text-2xl uppercase title">Books</h3>
-          </Link>
-          <Slider data={hotList} />
-        </div>
-      </section>
+      {cateList?.length > 1 &&
+        cateList.map((cate, index) => (
+          index > 0 &&
+          <section className="mt-12 mobile:px-2" key={index} data-aos="fade-left">
+            <div className="container">
+              <Link href={`${ROUTE.CATEGORY}/${replaceCate(cate.cateName)}`} className="border-b border-gray-300 mb-8 block">
+                <h3 className="font-bold text-2xl uppercase title">{cate.cateName}</h3>
+              </Link>
+              <Slider data={cate.data} />
+            </div>
+          </section>
+        ))
+      }
 
     </div>
   );

@@ -73,6 +73,7 @@ export default function Layout({ title, children, video, image, description, can
       <ScrollTop />
       <ToastContainer
         hideProgressBar
+        autoClose={1000}
       />
     </div>
   )

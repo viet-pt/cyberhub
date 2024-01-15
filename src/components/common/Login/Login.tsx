@@ -1,4 +1,5 @@
 import Modal from "@common/Modal/Modal";
+import { UserService } from "api/UserService";
 import { Google_ID } from "api/_config";
 import Image from "next/image";
 import React from "react";
@@ -13,18 +14,23 @@ const dd = 1 * 86400 * 1000;
 const d = new Date();
 
 const Login = ({ visible, closeModal }) => {
-  const [updateHeaderStore] = useUserStore((state) => [state.addUserInfo])
+  const [updateUserStore] = useUserStore((state) => [state.addUserInfo])
 
   const handleLoginGoogle = (response) => {
-    console.log(22222, response);
-    toast.success("Đăng nhập thành công!");
-    d.setTime(d.getTime() + dd);
-    const { googleId, profileObj, accessToken } = response;
-    cookies.set(storageKey.ACCESS_TOKEN, accessToken, { path: '/', expires: d });
-    cookies.set(storageKey.PROFILE, JSON.stringify(profileObj), { path: '/', expires: d });
-    // localStorage.setItem(storageKey.PROFILE, JSON.stringify(profileObj));
-    updateHeaderStore(profileObj);
-    closeModal();
+    const { tokenId, profileObj } = response;
+    const data = { googleId: tokenId };
+    UserService.login(data, res => {
+      if (res.success) {
+        toast.success("Đăng nhập thành công!");
+        d.setTime(d.getTime() + dd);
+        cookies.set(storageKey.ACCESS_TOKEN, res.data.access_token, { path: '/', expires: d });
+        cookies.set(storageKey.PROFILE, JSON.stringify(profileObj), { path: '/', expires: d });
+        updateUserStore(profileObj);
+        closeModal();
+      } else {
+        toast.error(res.message);
+      }
+    })
   }
 
   return (

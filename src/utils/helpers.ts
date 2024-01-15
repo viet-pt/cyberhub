@@ -1,4 +1,6 @@
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 export function changeAlias (alias) {
   if (!alias) {
@@ -30,7 +32,7 @@ export function convertTime (date, FORMAT_TIME?: string) {
   if (!date) {
     return date;
   }
-  return dayjs(date).format(FORMAT_TIME || "DD MMM YYYY");
+  return dayjs(date).utc().format(FORMAT_TIME || "dddd, DD/MM/YYYY HH:mm");
 }
 
 export function commaSeparateNumber (val) {
@@ -43,5 +45,10 @@ export function commaSeparateNumber (val) {
 
 export function getLink(data) {
   const title = changeAlias(data.title);
-  return `${title}-${data.id}`
+  return `${title}-${data.cateId}-${data.id}`;
+}
+
+export function replaceCate(str) {
+  const title = str.replace(/\s/g, '-');
+  return title;
 }

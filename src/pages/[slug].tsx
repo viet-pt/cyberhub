@@ -1,31 +1,37 @@
 import { ArticleService } from "api/ArticleService";
 import News from "components/page/News/News";
+import NotFoundPage from "components/page/NotFoundPage/NotFoundPage";
 
 const news = (props) => {
-  return <News {...props} />;
+  if (props.data) {
+    return <News {...props} />;
+  } else {
+    return <NotFoundPage />
+  }
+
 };
 
 async function getNewsDetail(id) {
-  const data = { id };
-  const res = await ArticleService.getAricleDetail(data);
+  const res = await ArticleService.getNewsDetail(id);
   return res;
 }
 
-async function getRelateList(id) {
-  const data = { id };
-  const res = await ArticleService.getRelateList(data);
+async function getRelateList(cateId) {
+  const params = { cateId };
+  const res = await ArticleService.getNewsList({ params });
   return res;
 }
 
 export async function getServerSideProps(ctx) {
-  const { slug } = ctx.query;
-  const id = slug.split('-').pop();
-  const [data, relateList] = await Promise.all([getNewsDetail(id), getRelateList(id)]);
-  
+  let slug = ctx.query.slug.split('-');
+  const id = slug.pop();
+  const cateId = slug.pop();
+  const [detail, relateList] = await Promise.all([getNewsDetail(id), getRelateList(cateId)]);
+
   return {
     props: {
-      title: data?.title,
-      data,
+      title: detail?.data?.title || '',
+      data: detail?.data || '',
       relateList,
     },
   };

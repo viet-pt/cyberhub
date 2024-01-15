@@ -16,7 +16,7 @@ const RelateArticle = ({ item, className }: Iprops) => {
       <Link href={getLink(item)} className="col-span-2 overflow-hidden rounded font-bold">
         <Image
           alt={item.title}
-          src={item.thumnail}
+          src={item.thumbnail}
           className='w-full h-auto aspect-[3/2] rounded pointer'
           width={0} height={0}
         />
@@ -29,7 +29,7 @@ const RelateArticle = ({ item, className }: Iprops) => {
         </Link>
 
         <div className="flex space-x-4 mt-3 text-[11px] lg:text-[12px]">
-          <p className="text-gray-400">{item.created}</p>
+          <p className="text-gray-400">{item.createTime}</p>
           <p className="uppercase">{item.cateName}</p>
         </div>
 

@@ -19,7 +19,7 @@ const MyApp = ({ Component, pageProps }: any) => {
   const getLayout = Component.getLayout || (page => (
     <Layout {...pageProps}>{page}</Layout>
   ));
-  const [updateHeaderStore] = useUserStore((state) => [state.addUserInfo]);
+  const [updateUserStore] = useUserStore((state) => [state.addUserInfo]);
 
   useEffect(() => {
     Aos.init({ duration: 1500, once: true });
@@ -30,7 +30,7 @@ const MyApp = ({ Component, pageProps }: any) => {
     // call api check token
     const profile = cookies.get(storageKey.PROFILE);
     if (profile) {
-      updateHeaderStore(profile);
+      updateUserStore(profile);
     }
   }
 
