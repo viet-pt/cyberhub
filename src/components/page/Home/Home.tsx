@@ -2,6 +2,7 @@ import HorizontalArticle from "@common/Article/HorizontalArticle";
 import MainArticle from "@common/Article/MainArticle";
 import VerticalArticle from "@common/Article/VerticalArticle";
 import Slider from "@common/Slider";
+import { ArticleService } from "api/ArticleService";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import { ROUTE } from "utils/constants";
@@ -9,8 +10,13 @@ import { replaceCate } from "utils/helpers";
 
 const Home = ({ hotNews, cateList }) => {
   useEffect(() => {
-
+    getNewsList();
   }, []);
+
+  async function getNewsList() {
+    const res = await ArticleService.getNewsList({});
+    return res;
+  }
 
   return (
     <div className="mt-4">

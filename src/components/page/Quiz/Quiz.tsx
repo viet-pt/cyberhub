@@ -1,20 +1,120 @@
 import QuizDetail from "@common/QuizDetail/QuizDetail";
 import { QuizService } from "api/QuizService";
 import cn from "clsx";
+import { FieldArray, Form, Formik } from 'formik';
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 import { ROUTE } from "utils/constants";
+import { storageKey } from "utils/storageKey";
 
 const TYPE = {
   RANDOM: 'RANDOM',
   TEST: 'TEST',
 }
 
+const TIME_1 = 20;
+const TIME_10 = 600;
+
+const CountTime = ({ reCountTime, totalTime, endTime }) => {
+  const [counter, setCounter] = React.useState(totalTime);
+
+  useEffect(() => {
+    if (counter === 0) {
+      endTime();
+    }
+
+    const timer: any = counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
+    return () => clearInterval(timer);
+  }, [counter]);
+
+  useEffect(() => {
+    setCounter(totalTime);
+  }, [reCountTime]);
+
+  let minutes: any = Math.floor(counter / 60);
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  let seconds: any = counter % 60;
+  seconds = seconds < 10 ? `0${seconds}` : seconds;
+
+  return (
+    <span className={cn({ 'text-red-600 font-bold': counter < 16 })}>{minutes}:{seconds}</span>
+  )
+}
+
 const Quiz = () => {
   const [type, setType] = useState<any>('');
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [totalQuestion, setTotalQuestion] = useState(0);
+  const [questionDone, setQuestionDone] = useState(0);
   const [questionList, setQuestionList] = useState<any>([]);
+  const [reCountTime, setReCountTime] = useState(0);
+  const [result, setResult] = useState<any>('');
+
   const router = useRouter();
+  const btnRef: any = useRef(null);
+  const bodyRef: any = useRef(null);
+  const isSubmit: any = useRef(true);
+
+  const convertBody = (answer) => {
+    let body: any = [];
+    for (const id in answer) {
+      if (answer[id]?.length) {
+        body.push({ id, answer: answer[id] });
+      }
+    }
+    return body;
+  }
+
+  const onSubmit = (data) => {
+    const { answer } = data;
+    let body = convertBody(answer);
+    bodyRef.current = body;
+
+    if (!isSubmit.current) {
+      setQuestionDone(body.length);
+      isSubmit.current = true;
+      return;
+    }
+
+    if (body.length < totalQuestion) {
+      toast.error('Vui lòng hoàn thành hết các câu hỏi!');
+      return;
+    }
+
+    submitTest(body);
+  };
+
+  const submitTest = (body) => {
+    console.log('body', body);
+    QuizService.submitTest(body, res => {
+      setIsSuccess(true);
+      setResult(res);
+      let detail: any = {};
+      res.detail.forEach(item => {
+        detail[item.id] = item;
+      });
+      if (type === TYPE.RANDOM) {
+        saveLocalId(body)
+      }
+    })
+  }
+
+  const saveLocalId = (body) => {
+    let listIdSave: any = sessionStorage.getItem(storageKey.LIST_ID);
+    if (listIdSave) {
+      listIdSave = listIdSave?.split(',');
+    } else {
+      listIdSave = [];
+    }
+    body.forEach(item => {
+      if (!listIdSave.includes(item.id)) {
+        listIdSave.push(item.id)
+      }
+    })
+    sessionStorage.setItem(storageKey.LIST_ID, listIdSave.toString());
+  }
 
   useEffect(() => {
     const curentType = router.query.type;
@@ -24,19 +124,41 @@ const Quiz = () => {
 
   const getQuestionList = () => {
     const number = type === TYPE.RANDOM ? 1 : 10;
+    setTotalQuestion(number);
+    setReCountTime(reCountTime + 1);
+
     const params = {
       cateName: '',
       number
     };
     QuizService.getQuestionList({ params }, res => {
       if (res?.length) {
+        setIsSuccess(false);
         setQuestionList(res);
       }
     })
   }
 
+  const continueTest = (resetForm) => {
+    bodyRef.current = null;
+    resetForm();
+    getQuestionList();
+  }
+
+  const handleEndTime = () => {
+    submitTest(bodyRef.current || {});
+    toast.error('Đã hết thời gian làm bài!');
+  }
+
+  const onClickAns = () => {
+    if (!isSuccess) {
+      isSubmit.current = false;
+      btnRef.current.click();
+    }
+  }
+
   return (
-    <div className="text-base relative pt-6 lg:pt-12 mb-28">
+    <div className="text-base relative pt-3 lg:pt-10 mb-28 px-3 lg:px-0 overflow-auto">
       {!type &&
         <section>
           <div className="font-bold text-base lg:text-2xl container">
@@ -66,18 +188,78 @@ const Quiz = () => {
                 type === TYPE.TEST ? 'bg-primary-orange text-white' : 'text-primary-orange')}>Bài thi</Link>
           </div>
 
-          <div className="flex-center mt-16">
+          <div>
             {!questionList.length &&
-              <button className="border-none bg-primary-red rounded-20 text-white py-1 w-40 font-semibold hover-raise text-lg"
-                onClick={getQuestionList}>
-                Kiểm tra
-              </button>
+              <div className="flex-center mt-16">
+                <button className="border-none bg-primary-red rounded-20 text-white py-1 w-40 font-semibold hover-raise text-lg"
+                  onClick={getQuestionList}>
+                  Kiểm tra
+                </button>
+              </div>
             }
+
             {questionList.length ?
-              <div className="lg:w-1/2">
-                {questionList.map((item, index) => (
-                  <QuizDetail key={index} data={item} index={index + 1} />
-                ))}
+              <div>
+                <Formik initialValues={{ answer: {} }} onSubmit={onSubmit}>
+                  {({ values, resetForm }) => (
+                    <Form>
+                      <div className="flex flex-col lg:flex-row">
+                        <div className="lg:w-1/2 mx-auto mt-10">
+                          <FieldArray
+                            name="answer"
+                            render={() => (
+                              <div>
+                                {questionList.map((item, index) => (
+                                  <div key={index}>
+                                    <QuizDetail
+                                      data={item}
+                                      onClickAns={onClickAns}
+                                      index={index + 1}
+                                      name={`answer.${item.id}`}
+                                      isSuccess={isSuccess}
+                                      result={result.detail[item.id]}
+                                    />
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          />
+                        </div>
+
+                        {!isSuccess ?
+                          <div className="w-full lg:w-1/5 mx-auto mt-10 text-center order-first lg:order-none grid lg:block space-x-4 sticky top-0">
+                            <div className="border-2 mb-4 border-primary-orange py-1 px-4 rounded-md">Đã làm: <span>{questionDone}</span>/<span>{totalQuestion}</span></div>
+                            <div className="border-2 mb-4 border-primary-orange py-1 px-4 rounded-md">
+                              <span className="mr-1">Thời gian còn lại:</span>
+                              <span>
+                                <CountTime
+                                  reCountTime={reCountTime}
+                                  endTime={handleEndTime}
+                                  totalTime={type === TYPE.RANDOM ? TIME_1 : TIME_10}
+                                />
+                              </span>
+                            </div>
+                            <div className="col-span-2 lg:mt-10">
+                              <button type="submit" ref={btnRef} className="rounded-md bg-primary-red text-white py-2 px-8 w-1/3 lg:w-auto hover-slide">Gửi bài</button>
+                            </div>
+                          </div> :
+
+                          <div className="w-full lg:w-1/5 mx-auto mt-10 text-center order-first lg:order-none grid lg:block space-x-4">
+                            <div className="border-2 mb-4 border-primary-orange py-1 px-4 rounded-md">Đã làm: <span>{questionDone}</span>/<span>{totalQuestion}</span></div>
+                            {/* <div className="border-2 mb-4 border-primary-orange py-1 px-4 rounded-md">Thời gian: <span>00:21:55</span></div> */}
+                            <div className="col-span-2 lg:mt-10">
+                              <div className="border-2 mb-4 border-primary-orange py-1 px-4 rounded-md">Điểm: <span>{result.score}</span>/<span>{result.total}</span></div>
+                              <button className="rounded-md bg-primary-red text-white py-2 px-8 w-1/3 lg:w-auto hover-slide"
+                                onClick={() => continueTest(resetForm)} type="button">
+                                {type === TYPE.RANDOM ? 'Câu hỏi tiếp theo' : 'Bài thi mới'}
+                              </button>
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    </Form>
+                  )}
+                </Formik>
               </div> : null
             }
           </div>

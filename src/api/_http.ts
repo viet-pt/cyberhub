@@ -3,6 +3,7 @@ import { hideLoading, showLoading } from "store/storeLoading";
 import Cookies from "universal-cookie";
 import { storageKey } from "utils/storageKey";
 import { BACKEND_API } from "./_config";
+const cookies = new Cookies();
 
 export const BASE_URL = `${BACKEND_API}/api`;
 
@@ -20,7 +21,6 @@ function getToken() {
   const isClient = process.browser;
   let token = "";
   if (isClient) {
-    const cookies = new Cookies();
     token = cookies.get(storageKey.ACCESS_TOKEN);
   }
   return token;
@@ -41,6 +41,14 @@ function handleHttpError(error) {
   return error;
 }
 
+function handleError(error) {
+  if (error?.response?.status === 401 || error?.response?.status === 403) {
+    localStorage.clear();
+    cookies.remove(storageKey.ACCESS_TOKEN);
+    cookies.remove(storageKey.PROFILE);
+  }
+}
+
 function makeHttpRequest(
   apiCall,
   successCallBack,
@@ -57,6 +65,7 @@ function makeHttpRequest(
           : responseData;
       successCallBack(successResponse);
     } catch (e) {
+      handleError(e);
       if (typeof failCallBack === "function") {
         failCallBack(handleHttpError(e));
       }
@@ -83,6 +92,7 @@ function makeHttpRequestWithLoading(
       successCallBack(successResponse);
     } catch (e) {
       hideLoading();
+      handleError(e);
       if (typeof failCallBack === "function") {
         failCallBack(handleHttpError(e));
       }
@@ -157,6 +167,7 @@ export async function postServerRequest(url: string, data: any, config = {}) {
     const responseData = await axios.post(url, data, config);
     return responseData.data;
   } catch (error) {
+    handleError(error);
     console.log("error", error);
   }
 }
@@ -166,6 +177,7 @@ export async function getServerRequest(url: string, config = {}) {
     const responseData = await axios.get(url, config);
     return responseData.data;
   } catch (error) {
+    handleError(error);
     console.log("error", error);
   }
 }

@@ -6,7 +6,7 @@ export const QuizService = {
     return getRequestShowLoading(URL, data, successCallback, failCallback);
   },
 
-  subscribe: function (data, successCallback, failCallback?: Function) {
+  submitTest: function (data, successCallback, failCallback?: Function) {
     const URL = '/question/question/submit/';
     return postRequestShowLoading(URL, data, {}, successCallback, failCallback);
   },

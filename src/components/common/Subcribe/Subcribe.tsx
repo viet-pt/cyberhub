@@ -1,4 +1,4 @@
-import IconBell from "@common/Icons/IconBell";
+import { IconBell } from "@common/Icons";
 import Modal from "@common/Modal/Modal";
 import { UserService } from "api/UserService";
 import { Google_ID } from "api/_config";

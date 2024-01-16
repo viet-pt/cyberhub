@@ -22,11 +22,11 @@ async function getNewsByCate() {
 
 export async function getServerSideProps() {
   const [hotNews, cateList] = await Promise.all([getNewsList(), getNewsByCate()]);
-
+  
   return {
     props: {
-      hotNews,
-      cateList,
+      hotNews: hotNews || [],
+      cateList: cateList || [],
     },
   };
 }

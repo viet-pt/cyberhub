@@ -1,5 +1,7 @@
 export { default as IconArrowRight } from "./IconArrowRight";
 export { default as IconArrowUp } from "./IconArrowUp";
+export { default as IconBell } from "./IconBell";
+export { default as IconCate } from "./IconCate";
 export { default as IconClose } from "./IconClose";
 export { default as IconFacebook } from "./IconFacebook";
 export { default as IconLogout } from "./IconLogout";

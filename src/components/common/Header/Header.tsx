@@ -58,6 +58,9 @@ const Header = () => {
     localStorage.clear();
     cookies.remove(storageKey.ACCESS_TOKEN);
     cookies.remove(storageKey.PROFILE);
+    if (pathname === ROUTE.QUIZ) {
+      Router.push('/');
+    }
   }
 
   const handleKeyDown = (event) => {
