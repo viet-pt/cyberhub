@@ -14,8 +14,8 @@ const TYPE = {
   TEST: 'TEST',
 }
 
-const TIME_1 = 20;
-const TIME_10 = 600;
+const TIME_1 = 5;
+const TIME_10 = 5;
 
 const CountTime = ({ reCountTime, totalTime, endTime }) => {
   const [counter, setCounter] = React.useState(totalTime);
@@ -57,6 +57,12 @@ const Quiz = () => {
   const bodyRef: any = useRef(null);
   const isSubmit: any = useRef(true);
 
+  useEffect(() => {
+    const curentType = router.query.type;
+    setType(curentType || '');
+    setQuestionList([]);
+  }, [router.query])
+
   const convertBody = (answer) => {
     let body: any = [];
     for (const id in answer) {
@@ -88,10 +94,11 @@ const Quiz = () => {
 
   const submitTest = (body) => {
     console.log('body', body);
+    setIsSuccess(true);
     QuizService.submitTest(body, res => {
-      setIsSuccess(true);
       setResult(res);
       let detail: any = {};
+      // can check lai
       res.detail.forEach(item => {
         detail[item.id] = item;
       });
@@ -117,23 +124,18 @@ const Quiz = () => {
     sessionStorage.setItem(storageKey.LIST_ID, listIdSave.toString());
   }
 
-  useEffect(() => {
-    const curentType = router.query.type;
-    setType(curentType || '');
-    setQuestionList([]);
-  }, [router.query])
-
   const getQuestionList = () => {
     const number = type === TYPE.RANDOM ? 1 : 10;
     setTotalQuestion(number);
     setReCountTime(reCountTime + 1);
-
+    
     const params = {
       cateName: '',
       number
     };
     QuizService.getQuestionList({ params }, res => {
       if (res?.length) {
+        setQuestionDone(0);
         setIsSuccess(false);
         setQuestionList(res);
       }
@@ -147,7 +149,17 @@ const Quiz = () => {
   }
 
   const handleEndTime = () => {
-    submitTest(bodyRef.current || {});
+    let list = bodyRef.current || [];
+    questionList.forEach(item => {
+      const findItem = list.find(e => e.id === item.id);
+      if (!findItem) {
+        list.push({
+          id: item.id,
+          answer: []
+        })
+      }
+    });
+    submitTest(list);
     toast.error('Đã hết thời gian làm bài!');
   }
 

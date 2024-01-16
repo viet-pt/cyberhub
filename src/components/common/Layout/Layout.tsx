@@ -63,7 +63,7 @@ export default function Layout({ title, children, video, image, description, can
 
       <main className='relative text-sm'>
         <Header />
-        <div className='mt-16 lg:mt-0'>
+        <div className='mt-16 lg:mt-0 min-h-[50vh]'>
           {children}
         </div>
         <Subcribe />

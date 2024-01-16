@@ -19,8 +19,8 @@ const QuizDetail = ({ data, index, name, onClickAns, isSuccess, result }) => {
       <div className='ml-6'>
         {data?.answer?.length && data.answer.map((item, i) => (
           <label key={i} className={cn('mb-2 block pointer',
-          { 'text-red-500': isSuccess && result.chosenAnswer.includes(TITLE_ANS[i]) && !result.correctAnswer.includes(TITLE_ANS[i]) },
-            { 'text-blue-500': isSuccess && result.correctAnswer.includes(TITLE_ANS[i]) },
+          { 'text-red-500': isSuccess && result?.chosenAnswer?.includes(TITLE_ANS[i]) && !result.correctAnswer?.includes(TITLE_ANS[i]) },
+            { 'text-blue-500': isSuccess && result?.correctAnswer?.includes(TITLE_ANS[i]) },
           )}>
             <Field
               onClick={onClickAns}
