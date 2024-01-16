@@ -95,6 +95,7 @@ const Quiz = () => {
       res.detail.forEach(item => {
         detail[item.id] = item;
       });
+      res.detail = detail;
       if (type === TYPE.RANDOM) {
         saveLocalId(body)
       }
@@ -217,7 +218,7 @@ const Quiz = () => {
                                       index={index + 1}
                                       name={`answer.${item.id}`}
                                       isSuccess={isSuccess}
-                                      result={result.detail[item.id]}
+                                      result={result?.detail ? result?.detail[item.id] : ''}
                                     />
                                   </div>
                                 ))}
