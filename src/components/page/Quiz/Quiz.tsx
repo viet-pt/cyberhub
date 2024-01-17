@@ -1,10 +1,10 @@
 import QuizDetail from "@common/QuizDetail/QuizDetail";
+import { Form, Select } from "antd";
 import { QuizService } from "api/QuizService";
 import cn from "clsx";
-import { FieldArray, Form, Formik } from 'formik';
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { ROUTE } from "utils/constants";
 import { storageKey } from "utils/storageKey";
@@ -14,8 +14,31 @@ const TYPE = {
   TEST: 'TEST',
 }
 
-const TIME_1 = 5;
-const TIME_10 = 5;
+const FAKE = [
+  {
+    "id": 163,
+    "question": "Người dùng công nghệ bao giờ cũng mong muốn các thiết bị máy tính, laptop của mình luôn được bảo vệ an toàn khỏi virus và các lỗ hổng bảo mật. Tuy nhiên, nhiều thói quen cơ bản hàng ngày tưởng chừng như vô hại lại hoàn toàn có thể tạo điều kiện cho các hacker bất ngờ “hỏi thăm” thiết bị của bạn, đó là?",
+    "answer": [
+      {
+        "label": "Xem phim hoặc các chương trình TV “lậu”"
+      },
+      {
+        "label": "Chia sẻ tài khoản của bạn cho những người khác"
+      },
+      {
+        "label": "Coi nhẹ việc quét mã độc cho USB"
+      },
+      {
+        "label": "Thường xuyên cập nhật bản vá hệ điều hành, phần mềm"
+      }
+    ],
+    "answerNum": 3,
+    "cateName": ""
+  }
+]
+
+const RANDOM_TIME = 500;
+const TIME_10 = 50;
 
 const CountTime = ({ reCountTime, totalTime, endTime }) => {
   const [counter, setCounter] = React.useState(totalTime);
@@ -49,19 +72,34 @@ const Quiz = () => {
   const [totalQuestion, setTotalQuestion] = useState(0);
   const [questionDone, setQuestionDone] = useState(0);
   const [questionList, setQuestionList] = useState<any>([]);
+  const [cateList, setCateList] = useState<any>([]);
   const [reCountTime, setReCountTime] = useState(0);
   const [result, setResult] = useState<any>('');
 
+  const [formInfo] = Form.useForm();
+  const [form] = Form.useForm();
   const router = useRouter();
-  const btnRef: any = useRef(null);
-  const bodyRef: any = useRef(null);
-  const isSubmit: any = useRef(true);
 
   useEffect(() => {
     const curentType = router.query.type;
     setType(curentType || '');
     setQuestionList([]);
   }, [router.query])
+
+  useEffect(() => {
+    getCategory();
+  }, [])
+
+  const getCategory = () => {
+    QuizService.getCategory({}, res => {
+      if (res?.length) {
+        setCateList([
+          { cateId: '', cateName: 'Tất cả' },
+          ...res,
+        ]);
+      }
+    })
+  }
 
   const convertBody = (answer) => {
     let body: any = [];
@@ -74,22 +112,12 @@ const Quiz = () => {
   }
 
   const onSubmit = (data) => {
-    const { answer } = data;
-    let body = convertBody(answer);
-    bodyRef.current = body;
+    console.log(1111, data);
 
-    if (!isSubmit.current) {
-      setQuestionDone(body.length);
-      isSubmit.current = true;
-      return;
-    }
+    // const { answer } = data;
+    // let body = convertBody(answer);
 
-    if (body.length < totalQuestion) {
-      toast.error('Vui lòng hoàn thành hết các câu hỏi!');
-      return;
-    }
-
-    submitTest(body);
+    // submitTest(body);
   };
 
   const submitTest = (body) => {
@@ -125,31 +153,31 @@ const Quiz = () => {
   }
 
   const getQuestionList = () => {
-    const number = type === TYPE.RANDOM ? 1 : 10;
-    setTotalQuestion(number);
-    setReCountTime(reCountTime + 1);
-    
     const params = {
-      cateName: '',
-      number
-    };
+      number: 1,
+      ...formInfo.getFieldsValue(),
+    }
+    setTotalQuestion(params.number);
+    setReCountTime(reCountTime + 1);
     QuizService.getQuestionList({ params }, res => {
       if (res?.length) {
         setQuestionDone(0);
         setIsSuccess(false);
         setQuestionList(res);
+        form.setFieldsValue({ list: res });
       }
+    }, error => {
+      toast.error(error.message);
     })
   }
 
-  const continueTest = (resetForm) => {
-    bodyRef.current = null;
-    resetForm();
+  const continueTest = () => {
+    form.resetFields();
     getQuestionList();
   }
 
   const handleEndTime = () => {
-    let list = bodyRef.current || [];
+    let list = form.getFieldsValue() || [];
     questionList.forEach(item => {
       const findItem = list.find(e => e.id === item.id);
       if (!findItem) {
@@ -164,10 +192,11 @@ const Quiz = () => {
   }
 
   const onClickAns = () => {
-    if (!isSuccess) {
-      isSubmit.current = false;
-      btnRef.current.click();
-    }
+
+  }
+
+  const onSubmitInfo = () => {
+    getQuestionList();
   }
 
   return (
@@ -177,7 +206,7 @@ const Quiz = () => {
           <div className="font-bold text-base lg:text-2xl container">
             <div className="w-5/6 ld:w-2/3 mx-auto">
               <p className="mb-4">Internet mang cả thế giới đến ngôi nhà của bạn, nhưng đồng nghĩa hacker cũng tiếp cận bạn dễ dàng hơn.</p>
-              <p className="mb-0">Hãy nâng cao nhận thức an toàn thông tin để tránh các nguy cơ lừa đảo trực tuyến, đánh cắp danh tính hay bị lâ nhiễm phần mềm độc hại... thông qua các câu hỏi trắc nghiệm!</p>
+              <p className="mb-0">Hãy nâng cao nhận thức an toàn thông tin để tránh các nguy cơ lừa đảo trực tuyến, đánh cắp danh tính hay bị lây nhiễm phần mềm độc hại... thông qua các câu hỏi trắc nghiệm!</p>
             </div>
           </div>
           <img src="/imgs/banner1.png" className='h-auto w-full mt-3 lg:-mt-12 ' alt="banner1" />
@@ -203,76 +232,100 @@ const Quiz = () => {
 
           <div>
             {!questionList.length &&
-              <div className="flex-center mt-16">
-                <button className="border-none bg-primary-red rounded-20 text-white py-1 w-40 font-semibold hover-raise text-lg"
-                  onClick={getQuestionList}>
-                  Kiểm tra
-                </button>
+              <div className="mt-12">
+                <Form onFinish={onSubmitInfo} form={formInfo} initialValues={{ cateId: '', number: 10 }}>
+                  <div className="rounded-lg py-6 px-10 shadow-7 bg-white mx-auto w-full lg:w-1/3">
+                    <p className="mb-6 text-center font-bold text-xl">THÔNG TIN BÀI THI</p>
+                    <div className="mb-3 flex items-center">
+                      <span className="w-1/3">Thể loại:</span>
+                      <Form.Item name='cateId' className="w-1/3 ml-4 mb-0">
+                        <Select placeholder="Chọn chủ đề" className='rounded-md' showSearch={false}>
+                          {cateList.map(item => (
+                            <Select.Option value={item.cateId} key={item.cateId}>{item.cateName}</Select.Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                    </div>
+                    <div className="mb-3 flex items-center">
+                      <span className="mr-4 w-1/3">Số lượng câu hỏi:</span>
+                      {type === TYPE.RANDOM ? 1 :
+                        <Form.Item name='number' className="w-1/3 mb-0">
+                          <Select className='rounded-md' showSearch={false}>
+                            {[10, 30].map(item => (
+                              <Select.Option value={item} key={item}>{item}</Select.Option>
+                            ))}
+                          </Select>
+                        </Form.Item>
+                      }
+                    </div>
+                    <div className="flex">
+                      <span className="w-1/3 mr-4">Thời gian làm bài:</span>
+                      <span>20 phút</span>
+                    </div>
+                  </div>
+                  <div className="flex-center mt-10">
+                    <button type="submit" className="border-none bg-primary-red rounded-20 text-white py-2 w-40 font-semibold hover-raise text-lg">
+                      Bắt đầu
+                    </button>
+                  </div>
+                </Form>
               </div>
             }
 
             {questionList.length ?
               <div>
-                <Formik initialValues={{ answer: {} }} onSubmit={onSubmit}>
-                  {({ values, resetForm }) => (
-                    <Form>
-                      <div className="flex flex-col lg:flex-row">
-                        <div className="lg:w-1/2 mx-auto mt-10">
-                          <FieldArray
-                            name="answer"
-                            render={() => (
-                              <div>
-                                {questionList.map((item, index) => (
-                                  <div key={index}>
-                                    <QuizDetail
-                                      data={item}
-                                      onClickAns={onClickAns}
-                                      index={index + 1}
-                                      name={`answer.${item.id}`}
-                                      isSuccess={isSuccess}
-                                      result={result?.detail ? result?.detail[item.id] : ''}
-                                    />
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                          />
+                <Form onFinish={onSubmit} form={form}>
+                  <div className="flex flex-col lg:flex-row">
+                    <div className="lg:w-1/2 mx-auto mt-10">
+                      <Form.List name="list">
+                        {(fields) => (
+                          fields.map((field, index) => (
+                            <div key={field.key} className='mb-4'>
+                              <QuizDetail
+                                data={questionList[index]}
+                                onClickAns={onClickAns}
+                                index={index + 1}
+                                isSuccess={isSuccess}
+                                result={''}
+                              />
+                            </div>
+                          ))
+                        )}
+                      </Form.List>
+                    </div>
+
+                    {!isSuccess ?
+                      <div className="w-full lg:w-1/5 mx-auto mt-10 text-center order-first lg:order-none grid lg:block space-x-4 sticky top-0">
+                        <div className="border-2 mb-4 border-primary-orange py-1 px-4 rounded-md">Đã làm: <span>{questionDone}</span>/<span>{totalQuestion}</span></div>
+                        <div className="border-2 mb-4 border-primary-orange py-1 px-4 rounded-md">
+                          <span className="mr-1">Thời gian còn lại:</span>
+                          <span>
+                            <CountTime
+                              reCountTime={reCountTime}
+                              endTime={handleEndTime}
+                              totalTime={type === TYPE.RANDOM ? RANDOM_TIME : TIME_10}
+                            />
+                          </span>
                         </div>
+                        <div className="col-span-2 lg:mt-10">
+                          <button type="submit" className="rounded-md bg-primary-red text-white py-2 px-8 w-1/3 lg:w-auto hover-slide">Gửi bài</button>
+                        </div>
+                      </div> :
 
-                        {!isSuccess ?
-                          <div className="w-full lg:w-1/5 mx-auto mt-10 text-center order-first lg:order-none grid lg:block space-x-4 sticky top-0">
-                            <div className="border-2 mb-4 border-primary-orange py-1 px-4 rounded-md">Đã làm: <span>{questionDone}</span>/<span>{totalQuestion}</span></div>
-                            <div className="border-2 mb-4 border-primary-orange py-1 px-4 rounded-md">
-                              <span className="mr-1">Thời gian còn lại:</span>
-                              <span>
-                                <CountTime
-                                  reCountTime={reCountTime}
-                                  endTime={handleEndTime}
-                                  totalTime={type === TYPE.RANDOM ? TIME_1 : TIME_10}
-                                />
-                              </span>
-                            </div>
-                            <div className="col-span-2 lg:mt-10">
-                              <button type="submit" ref={btnRef} className="rounded-md bg-primary-red text-white py-2 px-8 w-1/3 lg:w-auto hover-slide">Gửi bài</button>
-                            </div>
-                          </div> :
-
-                          <div className="w-full lg:w-1/5 mx-auto mt-10 text-center order-first lg:order-none grid lg:block space-x-4">
-                            <div className="border-2 mb-4 border-primary-orange py-1 px-4 rounded-md">Đã làm: <span>{questionDone}</span>/<span>{totalQuestion}</span></div>
-                            {/* <div className="border-2 mb-4 border-primary-orange py-1 px-4 rounded-md">Thời gian: <span>00:21:55</span></div> */}
-                            <div className="col-span-2 lg:mt-10">
-                              <div className="border-2 mb-4 border-primary-orange py-1 px-4 rounded-md">Điểm: <span>{result.score}</span>/<span>{result.total}</span></div>
-                              <button className="rounded-md bg-primary-red text-white py-2 px-8 w-1/3 lg:w-auto hover-slide"
-                                onClick={() => continueTest(resetForm)} type="button">
-                                {type === TYPE.RANDOM ? 'Câu hỏi tiếp theo' : 'Bài thi mới'}
-                              </button>
-                            </div>
-                          </div>
-                        }
+                      <div className="w-full lg:w-1/5 mx-auto mt-10 text-center order-first lg:order-none grid lg:block space-x-4">
+                        <div className="border-2 mb-4 border-primary-orange py-1 px-4 rounded-md">Đã làm: <span>{questionDone}</span>/<span>{totalQuestion}</span></div>
+                        {/* <div className="border-2 mb-4 border-primary-orange py-1 px-4 rounded-md">Thời gian: <span>00:21:55</span></div> */}
+                        <div className="col-span-2 lg:mt-10">
+                          <div className="border-2 mb-4 border-primary-orange py-1 px-4 rounded-md">Điểm: <span>{result.score}</span>/<span>{result.total}</span></div>
+                          <button className="rounded-md bg-primary-red text-white py-2 px-8 w-1/3 lg:w-auto hover-slide"
+                            onClick={continueTest} type="button">
+                            {type === TYPE.RANDOM ? 'Câu hỏi tiếp theo' : 'Bài thi mới'}
+                          </button>
+                        </div>
                       </div>
-                    </Form>
-                  )}
-                </Formik>
+                    }
+                  </div>
+                </Form>
               </div> : null
             }
           </div>

@@ -10,7 +10,7 @@ import Cookies from "universal-cookie";
 import { storageKey } from "utils/storageKey";
 
 const cookies = new Cookies();
-const dd = 8 * 60 * 60 * 1000;
+const dd = 6 * 60 * 60 * 1000;
 const d = new Date();
 
 const Login = ({ visible, closeModal }) => {

@@ -6,13 +6,16 @@ const home = (props) => {
 };
 
 async function getNewsList() {
-  const res = await ArticleService.getNewsList({});
+  let res = await ArticleService.getNewsList({});
+  if (!res?.length || !Array.isArray(res)) {
+    res = [];
+  } 
   return res;
 }
 
 async function getNewsByCate() {
   let res = await ArticleService.getNewsByCate({});
-  if (res?.length) {
+  if (res?.length && Array.isArray(res)) {
     res = res.filter(item => item.data?.length);
   } else {
     res = [];
@@ -25,8 +28,8 @@ export async function getServerSideProps() {
   
   return {
     props: {
-      hotNews: hotNews || [],
-      cateList: cateList || [],
+      hotNews: hotNews,
+      cateList: cateList,
     },
   };
 }

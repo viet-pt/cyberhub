@@ -48,11 +48,12 @@ const Home = ({ hotNews, cateList }) => {
         </div>
       </section>
 
-      {cateList?.length &&
+      {cateList?.length ?
         <section className="mt-10 bg-primary-yellow py-6" data-aos="fade-up">
           <div className="container mobile:px-2">
             <Link href={`${ROUTE.CATEGORY}/${replaceCate(cateList[0].cateName)}`}>
-              <h3 className="mb-6 font-bold text-2xl uppercase title">{cateList[0].cateName}</h3>
+              <h3 className="mb-6 font-bold text-2xl uppercase title" data-aos="fade-left">
+                {cateList[0].cateName}</h3>
             </Link>
             <div className="grid lg:grid-cols-2 gap-5">
               <MainArticle item={cateList[0].data[0]} />
@@ -66,23 +67,24 @@ const Home = ({ hotNews, cateList }) => {
               </div>
             </div>
           </div>
-        </section>
+        </section> : null
       }
 
       {cateList?.length > 1 &&
         cateList.map((cate, index) => (
           index > 0 &&
-          <section className="mt-12 mobile:px-2" key={index} data-aos="fade-left">
+          <section className="mt-12 mobile:px-2" key={index}>
             <div className="container">
-              <Link href={`${ROUTE.CATEGORY}/${replaceCate(cate.cateName)}`} className="border-b border-gray-300 mb-8 block">
+              <Link href={`${ROUTE.CATEGORY}/${replaceCate(cate.cateName)}`} className="border-b border-gray-300 mb-8 block" data-aos="fade-left">
                 <h3 className="font-bold text-2xl uppercase title">{cate.cateName}</h3>
               </Link>
-              <Slider data={cate.data} />
+              <div data-aos="fade-up">
+                <Slider data={cate.data} />
+              </div>
             </div>
           </section>
         ))
       }
-
     </div>
   );
 };

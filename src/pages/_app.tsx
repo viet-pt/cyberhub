@@ -8,6 +8,7 @@ import Cookies from "universal-cookie";
 import { apoc, openSans, roboto } from "utils/AppConfig";
 import { storageKey } from "utils/storageKey";
 
+// import 'antd/dist/reset.css';
 import "aos/dist/aos.css";
 import "react-toastify/dist/ReactToastify.css";
 import "styles/global.scss";
