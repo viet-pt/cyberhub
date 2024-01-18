@@ -14,7 +14,7 @@ export const ArticleService = {
   },
 
   getCategory: async function (data) {
-    const URL = `/post/category/`;
+    const URL = `/post/category/public/`;
     const res = await getServerRequest(URL, data);
     return res;
   },

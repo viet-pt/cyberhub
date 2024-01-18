@@ -1,7 +1,8 @@
-import { IconBell } from "@common/Icons";
+import { IconBell, IconClose2 } from "@common/Icons";
 import Modal from "@common/Modal/Modal";
 import { UserService } from "api/UserService";
 import { Google_ID } from "api/_config";
+import clsx from "clsx";
 import React, { useRef, useState } from "react";
 import GoogleLogin from "react-google-login";
 import { toast } from "react-toastify";
@@ -15,6 +16,7 @@ const d = new Date();
 
 const Subcribe = () => {
   const [visible, setVisible] = useState(false);
+  const [showSub, setShowSub] = useState(true);
   const [txt, setTxt] = useState('');
   const [authorized, updateUserStore] = useUserStore((state) => [state.authorized, state.addUserInfo]);
 
@@ -69,11 +71,20 @@ const Subcribe = () => {
 
   return (
     <>
-      <div className="fixed bottom-20 right-6 lg:right-6 flex items-center pointer group" onClick={handleSubcribe}>
+      <div className={clsx("fixed bottom-18 lg:bottom-20 right-6 lg:right-6 flex items-center pointer group", { 'hidden': !showSub })}>
         <div className="w-11 h-11 flex-center bg-white rounded-full shadow-7 p-2">
           <IconBell className='w-6 h-auto text-primary-orange group-hover:animate-ringring shake' />
         </div>
-        <div className="px-6 py-2 text-white bg-primary-orange text-base shadow-5 rounded-full font-semibold text-center ">Nhận thông tin</div>
+        <div className="relative">
+          <div className="px-6 py-2 text-white bg-primary-orange text-base shadow-5 rounded-full font-semibold text-center relative"
+            onClick={handleSubcribe}>
+            Nhận thông tin
+          </div>
+          <div className="rounded-full bg-white shadow-lg w-4 h-4 absolute right-0 -top-2 flex-center border-primary-orange border hover-scale"
+            onClick={() => setShowSub(false)}>
+            <IconClose2 className="w-3 text-primary-orange" />
+          </div>
+        </div>
       </div>
 
       <GoogleLogin

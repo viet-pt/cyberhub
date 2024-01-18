@@ -1,3 +1,4 @@
+import Modal from "@common/Modal/Modal";
 import QuizDetail from "@common/QuizDetail/QuizDetail";
 import { Form, Select } from "antd";
 import { QuizService } from "api/QuizService";
@@ -34,11 +35,50 @@ const FAKE = [
     ],
     "answerNum": 3,
     "cateName": ""
+  },
+  {
+    "id": 165,
+    "question": "Laptop của mình luôn được bảo vệ an toàn khỏi virus và các lỗ hổng bảo mật. Tuy nhiên, nhiều thói quen cơ bản hàng ngày tưởng chừng như vô hại lại hoàn toàn có thể tạo điều kiện cho các hacker bất ngờ “hỏi thăm” thiết bị của bạn, đó là?",
+    "answer": [
+      {
+        "label": "Xem phim hoặc các chương trình TV “lậu”"
+      },
+      {
+        "label": "Chia sẻ tài khoản của bạn cho những người khác"
+      },
+      {
+        "label": "Coi nhẹ việc quét mã độc cho USB"
+      },
+      {
+        "label": "Thường xuyên cập nhật bản vá hệ điều hành, phần mềm"
+      }
+    ],
+    "answerNum": 3,
+    "cateName": ""
+  },
+  {
+    "id": 167,
+    "question": "Tuy nhiên, nhiều thói quen cơ bản hàng ngày tưởng chừng như vô hại lại hoàn toàn có thể tạo điều kiện cho các hacker bất ngờ “hỏi thăm” thiết bị của bạn, đó là?",
+    "answer": [
+      {
+        "label": "Xem phim hoặc các chương trình TV “lậu”"
+      },
+      {
+        "label": "Chia sẻ tài khoản của bạn cho những người khác"
+      },
+      {
+        "label": "Coi nhẹ việc quét mã độc cho USB"
+      },
+      {
+        "label": "Thường xuyên cập nhật bản vá hệ điều hành, phần mềm"
+      }
+    ],
+    "answerNum": 1,
+    "cateName": ""
   }
 ]
 
-const RANDOM_TIME = 500;
-const TIME_10 = 50;
+const TIME_1_Q = 60;
 
 const CountTime = ({ reCountTime, totalTime, endTime }) => {
   const [counter, setCounter] = React.useState(totalTime);
@@ -47,7 +87,6 @@ const CountTime = ({ reCountTime, totalTime, endTime }) => {
     if (counter === 0) {
       endTime();
     }
-
     const timer: any = counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
     return () => clearInterval(timer);
   }, [counter]);
@@ -62,19 +101,21 @@ const CountTime = ({ reCountTime, totalTime, endTime }) => {
   seconds = seconds < 10 ? `0${seconds}` : seconds;
 
   return (
-    <span className={cn({ 'text-red-600 font-bold': counter < 16 })}>{minutes}:{seconds}</span>
+    <span className='text-red-600 font-bold text-xl'>{minutes} : {seconds}</span>
   )
 }
 
 const Quiz = () => {
   const [type, setType] = useState<any>('');
   const [isSuccess, setIsSuccess] = useState(false);
+  const [openConfirmSubmit, setOpenConfirmSubmit] = useState(false);
   const [totalQuestion, setTotalQuestion] = useState(0);
   const [questionDone, setQuestionDone] = useState(0);
   const [questionList, setQuestionList] = useState<any>([]);
   const [cateList, setCateList] = useState<any>([]);
   const [reCountTime, setReCountTime] = useState(0);
   const [result, setResult] = useState<any>('');
+  const [timeTodo, setTimeTodo] = useState('');
 
   const [formInfo] = Form.useForm();
   const [form] = Form.useForm();
@@ -84,6 +125,12 @@ const Quiz = () => {
     const curentType = router.query.type;
     setType(curentType || '');
     setQuestionList([]);
+
+    if (curentType) {
+      let totalQ = curentType === TYPE.RANDOM ? 1 : 10;
+      form.resetFields();
+      handleTimeTodo(totalQ);
+    }
   }, [router.query])
 
   useEffect(() => {
@@ -101,36 +148,24 @@ const Quiz = () => {
     })
   }
 
-  const convertBody = (answer) => {
+  const onSubmit = () => {
+    const values = form.getFieldsValue();
+    setOpenConfirmSubmit(false);
     let body: any = [];
-    for (const id in answer) {
-      if (answer[id]?.length) {
-        body.push({ id, answer: answer[id] });
-      }
+    for (const [index, item] of Object.entries(values) as any) {
+      body.push({
+        answer: typeof item?.answer === "string" ? [item.answer] : item.answer || [],
+        id: questionList[Number(index)].id
+      })
     }
-    return body;
-  }
-
-  const onSubmit = (data) => {
-    console.log(1111, data);
-
-    // const { answer } = data;
-    // let body = convertBody(answer);
-
-    // submitTest(body);
+    submitTest(body);
   };
 
   const submitTest = (body) => {
     console.log('body', body);
-    setIsSuccess(true);
     QuizService.submitTest(body, res => {
+      setIsSuccess(true);
       setResult(res);
-      let detail: any = {};
-      // can check lai
-      res.detail.forEach(item => {
-        detail[item.id] = item;
-      });
-      res.detail = detail;
       if (type === TYPE.RANDOM) {
         saveLocalId(body)
       }
@@ -157,18 +192,36 @@ const Quiz = () => {
       number: 1,
       ...formInfo.getFieldsValue(),
     }
-    setTotalQuestion(params.number);
     setReCountTime(reCountTime + 1);
+
+    // setQuestionDone(0);
+    // setIsSuccess(false);
+    // setQuestionList(FAKE);
+
     QuizService.getQuestionList({ params }, res => {
       if (res?.length) {
         setQuestionDone(0);
         setIsSuccess(false);
         setQuestionList(res);
-        form.setFieldsValue({ list: res });
       }
     }, error => {
       toast.error(error.message);
     })
+  }
+
+  const handleTimeTodo = (totalQ) => {
+    let time = totalQ * TIME_1_Q;
+    let txt = '';
+    if (time < 60) {
+      txt = `${time} giây`;
+    } else {
+      let minutes: any = Math.floor(time / 60);
+      let seconds: any = time % 60;
+      seconds = seconds < 10 ? `0${seconds}` : seconds;
+      txt = `${minutes} phút ${seconds > 0 ? (seconds + ' giây') : ''}`;
+    }
+    setTotalQuestion(totalQ);
+    setTimeTodo(txt);
   }
 
   const continueTest = () => {
@@ -191,8 +244,24 @@ const Quiz = () => {
     toast.error('Đã hết thời gian làm bài!');
   }
 
-  const onClickAns = () => {
+  const onChangeFormInfo = (data) => {
+    const keyNames: any = Object.keys(data);
+    const value = data[keyNames];
+    if (keyNames[0] === 'number') {
+      handleTimeTodo(value);
+    }
+  }
 
+  const onChangeQuiz = (data, values) => {
+    let number = 0;
+    for (const [index, item] of Object.entries(values) as any) {
+      if (typeof item?.answer === "string") {
+        number++;
+      } else if (Array.isArray(item.answer) && item.answer.length) {
+        number++;
+      }
+    }
+    setQuestionDone(number);
   }
 
   const onSubmitInfo = () => {
@@ -200,7 +269,7 @@ const Quiz = () => {
   }
 
   return (
-    <div className="text-base relative pt-3 lg:pt-10 mb-28 px-3 lg:px-0 overflow-auto">
+    <div className="text-base pt-3 lg:pt-10 mb-28 px-3 lg:px-0">
       {!type &&
         <section>
           <div className="font-bold text-base lg:text-2xl container">
@@ -233,7 +302,8 @@ const Quiz = () => {
           <div>
             {!questionList.length &&
               <div className="mt-12">
-                <Form onFinish={onSubmitInfo} form={formInfo} initialValues={{ cateId: '', number: 10 }}>
+                <Form onFinish={onSubmitInfo} form={formInfo} initialValues={{ cateId: '', number: 10 }}
+                  onValuesChange={onChangeFormInfo}>
                   <div className="rounded-lg py-6 px-10 shadow-7 bg-white mx-auto w-full lg:w-1/3">
                     <p className="mb-6 text-center font-bold text-xl">THÔNG TIN BÀI THI</p>
                     <div className="mb-3 flex items-center">
@@ -260,7 +330,7 @@ const Quiz = () => {
                     </div>
                     <div className="flex">
                       <span className="w-1/3 mr-4">Thời gian làm bài:</span>
-                      <span>20 phút</span>
+                      <span>{timeTodo}</span>
                     </div>
                   </div>
                   <div className="flex-center mt-10">
@@ -273,64 +343,79 @@ const Quiz = () => {
             }
 
             {questionList.length ?
-              <div>
-                <Form onFinish={onSubmit} form={form}>
-                  <div className="flex flex-col lg:flex-row">
-                    <div className="lg:w-1/2 mx-auto mt-10">
-                      <Form.List name="list">
-                        {(fields) => (
-                          fields.map((field, index) => (
-                            <div key={field.key} className='mb-4'>
-                              <QuizDetail
-                                data={questionList[index]}
-                                onClickAns={onClickAns}
-                                index={index + 1}
-                                isSuccess={isSuccess}
-                                result={''}
-                              />
-                            </div>
-                          ))
-                        )}
-                      </Form.List>
-                    </div>
-
-                    {!isSuccess ?
-                      <div className="w-full lg:w-1/5 mx-auto mt-10 text-center order-first lg:order-none grid lg:block space-x-4 sticky top-0">
-                        <div className="border-2 mb-4 border-primary-orange py-1 px-4 rounded-md">Đã làm: <span>{questionDone}</span>/<span>{totalQuestion}</span></div>
-                        <div className="border-2 mb-4 border-primary-orange py-1 px-4 rounded-md">
-                          <span className="mr-1">Thời gian còn lại:</span>
-                          <span>
-                            <CountTime
-                              reCountTime={reCountTime}
-                              endTime={handleEndTime}
-                              totalTime={type === TYPE.RANDOM ? RANDOM_TIME : TIME_10}
-                            />
-                          </span>
-                        </div>
-                        <div className="col-span-2 lg:mt-10">
-                          <button type="submit" className="rounded-md bg-primary-red text-white py-2 px-8 w-1/3 lg:w-auto hover-slide">Gửi bài</button>
-                        </div>
-                      </div> :
-
-                      <div className="w-full lg:w-1/5 mx-auto mt-10 text-center order-first lg:order-none grid lg:block space-x-4">
-                        <div className="border-2 mb-4 border-primary-orange py-1 px-4 rounded-md">Đã làm: <span>{questionDone}</span>/<span>{totalQuestion}</span></div>
-                        {/* <div className="border-2 mb-4 border-primary-orange py-1 px-4 rounded-md">Thời gian: <span>00:21:55</span></div> */}
-                        <div className="col-span-2 lg:mt-10">
-                          <div className="border-2 mb-4 border-primary-orange py-1 px-4 rounded-md">Điểm: <span>{result.score}</span>/<span>{result.total}</span></div>
-                          <button className="rounded-md bg-primary-red text-white py-2 px-8 w-1/3 lg:w-auto hover-slide"
-                            onClick={continueTest} type="button">
-                            {type === TYPE.RANDOM ? 'Câu hỏi tiếp theo' : 'Bài thi mới'}
-                          </button>
-                        </div>
+              <div className="flex flex-col lg:flex-row">
+                <div className="lg:w-1/2 mx-auto mt-10">
+                  <Form form={form} onValuesChange={onChangeQuiz}>
+                    {questionList.map((item, index) => (
+                      <div key={index} className='mb-4'>
+                        <QuizDetail
+                          data={item}
+                          index={index}
+                          isSuccess={isSuccess}
+                          isMulti={type === TYPE.TEST}
+                          result={result.detail ? result.detail[index] : ''}
+                        />
                       </div>
-                    }
+                    ))}
+                  </Form>
+                </div>
+
+                {!isSuccess ?
+                  <div className="w-full lg:w-1/5 mx-auto mt-10 text-center order-first lg:order-none grid lg:block mobile:space-x-4 sticky top-0">
+                    <div className="border mb-4 border-primary-orange py-1 px-4 rounded-md text-base">
+                      <span>Đã làm:</span>
+                      <span className="text-xl text-red-600 ml-1 font-bold">{questionDone} / {totalQuestion}</span>
+                    </div>
+                    <div className="border mb-4 border-primary-orange py-1 px-4 rounded-md text-base">
+                      <span className="mr-1">Thời gian còn lại:</span>
+                      <span>
+                        <CountTime
+                          reCountTime={reCountTime}
+                          endTime={handleEndTime}
+                          totalTime={totalQuestion * TIME_1_Q}
+                        />
+                      </span>
+                    </div>
+                    <div className="col-span-2 lg:mt-10">
+                      <button className="rounded-md bg-primary-red text-white py-2 px-8 w-1/3 lg:w-auto hover-slide" onClick={() => setOpenConfirmSubmit(true)}>
+                        Nộp bài</button>
+                    </div>
+                  </div> :
+
+                  <div className="w-full lg:w-1/5 mx-auto mt-10 text-center order-first lg:order-none grid lg:block mobile:space-x-4">
+                    <div className="border mb-4 border-primary-orange py-1 px-4 rounded-md text-base">
+                      <span>Đã làm: </span>
+                      <span className="text-xl text-red-600 ml-1 font-bold">{questionDone} / {totalQuestion}</span>
+                    </div>
+                    {/* <div className="border mb-4 border-primary-orange py-1 px-4 rounded-md">Thời gian: <span>00:21:55</span></div> */}
+                    <div className="col-span lg:mt-10">
+                      <div className="border mb-4 border-primary-orange py-1 px-4 rounded-md text-base">
+                        <span>Điểm: </span>
+                        <span className="text-xl text-red-600 ml-1 font-bold">{result.score} / {result.total}</span>
+                      </div>
+                      <button className="rounded-md bg-primary-red text-white py-2 px-8 w-1/3 lg:w-auto hover-slide"
+                        onClick={continueTest} type="button">
+                        {type === TYPE.RANDOM ? 'Câu hỏi tiếp theo' : 'Bài thi mới'}
+                      </button>
+                    </div>
                   </div>
-                </Form>
+                }
               </div> : null
             }
+
           </div>
         </section>
       }
+      <Modal
+        visible={openConfirmSubmit}
+        closeModal={() => setOpenConfirmSubmit(false)}
+        confirmAction={onSubmit}
+        confirmButton="Nộp bài"
+        closeButton="Hủy"
+        title="Thông báo"
+        content={<div className="text-center">
+          {questionDone < totalQuestion ? "Bạn chưa hoàn thành bài thi, bạn có chắc chắn muốn nộp bài?" : "Bạn có chắc chắn muốn nộp bài?"}</div>}
+      />
     </div>
   );
 };

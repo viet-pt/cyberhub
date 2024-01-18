@@ -64,7 +64,7 @@ const Modal = ({ visible, title, content, closeButton,
                     <button
                       type="button"
                       className="rounded-md border border-solid border-gray-300 text-primary-black
-                        px-4 py-1 hover:border-blue-400 hover:text-blue-500"
+                        px-6 py-1.5 hover:border-primary-orange hover:text-primary-orange"
                       onClick={closeModal}
                     >
                       {i18n[closeButton] || closeButton}
@@ -74,8 +74,8 @@ const Modal = ({ visible, title, content, closeButton,
                   {confirmButton &&
                     <button
                       type="button"
-                      className="rounded-md border border-solid border-blue-500 bg-blue-500 text-white
-                        px-4 py-1 hover:opacity-70"
+                      className="rounded-md border border-solid border-primary-orange bg-primary-orange text-white
+                        px-6 py-1.5 hover:opacity-70"
                       onClick={confirmAction}
                     >
                       {i18n[confirmButton] || confirmButton}

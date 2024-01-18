@@ -265,3 +265,9 @@ input[type="number"] {
     background-color: #dd3333;
   }
 }
+
+.quiz-detail {
+  .ant-radio-wrapper-disabled, .ant-checkbox-disabled+span {
+    color: black !important;
+  }
+}

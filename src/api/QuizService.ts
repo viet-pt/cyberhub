@@ -7,7 +7,7 @@ export const QuizService = {
   },
 
   getCategory: function (data, successCallback, failCallback?: Function) {
-    const URL = `/post/category/`;
+    const URL = `/post/category/public/`;
     return getRequestShowLoading(URL, data, successCallback, failCallback);
   },
 
