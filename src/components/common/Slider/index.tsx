@@ -1,4 +1,4 @@
-import HorizontalArticle from "@common/Article/HorizontalArticle";
+import SlideArticle from "@common/Article/SlideArticle";
 import { IconNext, IconPrev } from "@common/Icons";
 import clsx from "clsx";
 import Autoplay from "embla-carousel-autoplay";
@@ -39,7 +39,7 @@ const Slider = ({ data, className }: ISlider) => {
               className={clsx("w-1/2 md:w-1/3 lg:w-1/5 shrink-0 px-2.5 md:px-4")}
               key={index}
             >
-              <HorizontalArticle item={item} />
+              <SlideArticle item={item} />
             </div>
           ))}
         </div>

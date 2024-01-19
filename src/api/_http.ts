@@ -205,7 +205,7 @@ export function deleteRequest(
   failCallBack?: Function,
   transformFunc?: Function
 ) {
-  return makeHttpRequest(
+  return makeHttpRequestWithLoading(
     () => axios.delete(url, config),
     successCallBack,
     failCallBack,

@@ -60,6 +60,7 @@ module.exports = {
       screens: {
         mobile: { max: "640px" },
         tablet: { max: "768px" },
+        '2xl': '1280px',
       },
       borderRadius: {
         DEFAULT: "4px",

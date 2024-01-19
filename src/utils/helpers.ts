@@ -32,7 +32,7 @@ export function convertTime (date, FORMAT_TIME?: string) {
   if (!date) {
     return date;
   }
-  return dayjs(date).utc().format(FORMAT_TIME || "dddd, DD/MM/YYYY HH:mm");
+  return dayjs(date).format(FORMAT_TIME || "dddd, DD/MM/YYYY HH:mm");
 }
 
 export function commaSeparateNumber (val) {

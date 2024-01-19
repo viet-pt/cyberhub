@@ -271,3 +271,26 @@ input[type="number"] {
     color: black !important;
   }
 }
+
+
+.modal-wrapper {
+  &.ant-modal {
+    top: 50px !important;
+  }
+  .ant-modal-content {
+    @apply rounded-lg text-black;
+  }
+  .ant-modal-header {
+    @apply relative text-white rounded-tl-lg rounded-tr-lg;
+  }
+  .ant-modal-title {
+    @apply text-center text-lg;
+  }
+  .ant-modal-body {
+    max-height: 75vh;
+    overflow-y: auto;
+  }
+  .ant-modal-footer {
+    @apply flex justify-center;
+  }
+}

@@ -22,7 +22,7 @@ const Modal = ({ visible, title, content, closeButton,
 
   return (
     <Transition appear show={visible} as={Fragment}>
-      <Dialog as="div" className={cn("relative z-[10000]", className)} onClose={closeModal}>
+      <Dialog as="div" className={cn("relative z-[1000]", className)} onClose={closeModal}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"

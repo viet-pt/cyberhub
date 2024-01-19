@@ -31,6 +31,8 @@ export async function getServerSideProps(ctx) {
   return {
     props: {
       title: detail?.data?.title || '',
+      description: detail?.data?.description || '',
+      image: detail?.data?.thumbnail || '',
       data: detail?.data || '',
       relateList,
     },

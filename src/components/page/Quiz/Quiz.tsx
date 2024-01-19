@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useCateStore } from "store/storeCate";
 import { ROUTE } from "utils/constants";
 import { storageKey } from "utils/storageKey";
 
@@ -15,70 +16,7 @@ const TYPE = {
   TEST: 'TEST',
 }
 
-const FAKE = [
-  {
-    "id": 163,
-    "question": "Người dùng công nghệ bao giờ cũng mong muốn các thiết bị máy tính, laptop của mình luôn được bảo vệ an toàn khỏi virus và các lỗ hổng bảo mật. Tuy nhiên, nhiều thói quen cơ bản hàng ngày tưởng chừng như vô hại lại hoàn toàn có thể tạo điều kiện cho các hacker bất ngờ “hỏi thăm” thiết bị của bạn, đó là?",
-    "answer": [
-      {
-        "label": "Xem phim hoặc các chương trình TV “lậu”"
-      },
-      {
-        "label": "Chia sẻ tài khoản của bạn cho những người khác"
-      },
-      {
-        "label": "Coi nhẹ việc quét mã độc cho USB"
-      },
-      {
-        "label": "Thường xuyên cập nhật bản vá hệ điều hành, phần mềm"
-      }
-    ],
-    "answerNum": 3,
-    "cateName": ""
-  },
-  {
-    "id": 165,
-    "question": "Laptop của mình luôn được bảo vệ an toàn khỏi virus và các lỗ hổng bảo mật. Tuy nhiên, nhiều thói quen cơ bản hàng ngày tưởng chừng như vô hại lại hoàn toàn có thể tạo điều kiện cho các hacker bất ngờ “hỏi thăm” thiết bị của bạn, đó là?",
-    "answer": [
-      {
-        "label": "Xem phim hoặc các chương trình TV “lậu”"
-      },
-      {
-        "label": "Chia sẻ tài khoản của bạn cho những người khác"
-      },
-      {
-        "label": "Coi nhẹ việc quét mã độc cho USB"
-      },
-      {
-        "label": "Thường xuyên cập nhật bản vá hệ điều hành, phần mềm"
-      }
-    ],
-    "answerNum": 3,
-    "cateName": ""
-  },
-  {
-    "id": 167,
-    "question": "Tuy nhiên, nhiều thói quen cơ bản hàng ngày tưởng chừng như vô hại lại hoàn toàn có thể tạo điều kiện cho các hacker bất ngờ “hỏi thăm” thiết bị của bạn, đó là?",
-    "answer": [
-      {
-        "label": "Xem phim hoặc các chương trình TV “lậu”"
-      },
-      {
-        "label": "Chia sẻ tài khoản của bạn cho những người khác"
-      },
-      {
-        "label": "Coi nhẹ việc quét mã độc cho USB"
-      },
-      {
-        "label": "Thường xuyên cập nhật bản vá hệ điều hành, phần mềm"
-      }
-    ],
-    "answerNum": 1,
-    "cateName": ""
-  }
-]
-
-const TIME_1_Q = 60;
+const TIME_1_Q = 10;
 
 const CountTime = ({ reCountTime, totalTime, endTime }) => {
   const [counter, setCounter] = React.useState(totalTime);
@@ -120,6 +58,7 @@ const Quiz = () => {
   const [formInfo] = Form.useForm();
   const [form] = Form.useForm();
   const router = useRouter();
+  const [cateStore] = useCateStore((state) => [state.data]);
 
   useEffect(() => {
     const curentType = router.query.type;
@@ -134,19 +73,13 @@ const Quiz = () => {
   }, [router.query])
 
   useEffect(() => {
-    getCategory();
-  }, [])
-
-  const getCategory = () => {
-    QuizService.getCategory({}, res => {
-      if (res?.length) {
-        setCateList([
-          { cateId: '', cateName: 'Tất cả' },
-          ...res,
-        ]);
-      }
-    })
-  }
+    if (cateStore.length) {
+      setCateList([
+        { cateId: '', cateName: 'Tất cả' },
+        ...cateStore,
+      ]);
+    }
+  }, [cateStore])
 
   const onSubmit = () => {
     const values = form.getFieldsValue();
@@ -158,11 +91,7 @@ const Quiz = () => {
         id: questionList[Number(index)].id
       })
     }
-    submitTest(body);
-  };
 
-  const submitTest = (body) => {
-    console.log('body', body);
     QuizService.submitTest(body, res => {
       setIsSuccess(true);
       setResult(res);
@@ -170,7 +99,7 @@ const Quiz = () => {
         saveLocalId(body)
       }
     })
-  }
+  };
 
   const saveLocalId = (body) => {
     let listIdSave: any = sessionStorage.getItem(storageKey.LIST_ID);
@@ -189,7 +118,7 @@ const Quiz = () => {
 
   const getQuestionList = () => {
     const params = {
-      number: 1,
+      number: totalQuestion,
       ...formInfo.getFieldsValue(),
     }
     setReCountTime(reCountTime + 1);
@@ -230,17 +159,7 @@ const Quiz = () => {
   }
 
   const handleEndTime = () => {
-    let list = form.getFieldsValue() || [];
-    questionList.forEach(item => {
-      const findItem = list.find(e => e.id === item.id);
-      if (!findItem) {
-        list.push({
-          id: item.id,
-          answer: []
-        })
-      }
-    });
-    submitTest(list);
+    onSubmit();
     toast.error('Đã hết thời gian làm bài!');
   }
 

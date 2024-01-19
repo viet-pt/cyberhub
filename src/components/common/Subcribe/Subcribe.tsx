@@ -1,11 +1,13 @@
 import { IconBell, IconClose2 } from "@common/Icons";
 import Modal from "@common/Modal/Modal";
+import { Select } from "antd";
 import { UserService } from "api/UserService";
 import { Google_ID } from "api/_config";
 import clsx from "clsx";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import GoogleLogin from "react-google-login";
 import { toast } from "react-toastify";
+import { useCateStore } from "store/storeCate";
 import { useUserStore } from "store/storeUser";
 import Cookies from "universal-cookie";
 import { storageKey } from "utils/storageKey";
@@ -14,24 +16,34 @@ const cookies = new Cookies();
 const dd = 1 * 86400 * 1000;
 const d = new Date();
 
+const ALL = '';
+
 const Subcribe = () => {
+  const [cateList, setCateList] = useState<any>([]);
+  const [cateSeleted, setCateSeleted] = useState<any>(['']);
   const [visible, setVisible] = useState(false);
   const [showSub, setShowSub] = useState(true);
-  const [txt, setTxt] = useState('');
   const [authorized, updateUserStore] = useUserStore((state) => [state.authorized, state.addUserInfo]);
+  const [cateStore] = useCateStore((state) => [state.data]);
 
   const btnRef: any = useRef(null);
 
-  const onChange = (e) => {
-    setTxt(e.target.value);
-  }
+  useEffect(() => {
+    if (cateStore.length) {
+      let list = cateStore.map((item: any) => ({
+        value: item.cateId, label: item.cateName
+      }))
+      list.unshift({ value: ALL, label: 'Tất cả' });
+      setCateList(list);
+    }
+  }, [cateStore])
 
   const onSubscribe = () => {
-    UserService.subscribe({}, res => {
+    let cateId = cateSeleted.includes(ALL) ? [] : cateSeleted;
+    UserService.subscribe({ cateId }, res => {
       if (res.success) {
         toast.success("Đăng ký nhận thông tin thành công!");
         setVisible(false);
-        setTxt('');
       } else {
         toast.error(res.message);
       }
@@ -47,7 +59,6 @@ const Subcribe = () => {
         cookies.set(storageKey.ACCESS_TOKEN, res.data.access_token, { path: '/', expires: d });
         cookies.set(storageKey.PROFILE, JSON.stringify(profileObj), { path: '/', expires: d });
         updateUserStore(profileObj);
-        onSubscribe();
       } else {
         toast.error(res.message);
       }
@@ -55,24 +66,27 @@ const Subcribe = () => {
   }
 
   const handleSubcribe = () => {
-    // setVisible(true);
     if (authorized) {
-      onSubscribe();
+      setVisible(true);
     } else {
       btnRef.current.click();
     }
   }
 
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      onSubscribe();
+  const handleChange = (value) => {
+    let data: any = value;
+    if (value[value.length - 1] === ALL || (!value.includes(ALL) && value.length === cateList.length - 1)) {
+      data = [ALL];
+    } else if (value.includes(ALL) && value.length < cateList.length) {
+      data = value.filter(item => item !== ALL);
     }
-  }
+    setCateSeleted(data);
+  };
 
   return (
     <>
       <div className={clsx("fixed bottom-18 lg:bottom-20 right-6 lg:right-6 flex items-center pointer group", { 'hidden': !showSub })}>
-        <div className="w-11 h-11 flex-center bg-white rounded-full shadow-7 p-2">
+        <div className="w-11 h-11 flex-center bg-white rounded-full shadow-7 p-2" onClick={handleSubcribe}>
           <IconBell className='w-6 h-auto text-primary-orange group-hover:animate-ringring shake' />
         </div>
         <div className="relative">
@@ -101,14 +115,19 @@ const Subcribe = () => {
         title="Nhận thông tin từ chúng tôi"
         content={
           <div className="w-3/5 mt-6 mx-auto">
-            <input className="bg-transparent py-2 rounded-20 text-center px-4 w-full outline-none md:text-base
-                 border-primary-orange border border-solid"
-              placeholder="Nhập email"
-              onKeyDown={handleKeyDown}
-              value={txt} onChange={onChange}
+            <Select
+              mode="multiple"
+              allowClear
+              className="w-full"
+              placeholder="Chọn danh mục theo dõi"
+              // defaultValue={['']}
+              value={cateSeleted}
+              onChange={handleChange}
+              options={cateList}
             />
-            <div className="flex-center mt-4">
-              <button type="submit" onClick={onSubscribe} disabled={!txt}
+
+            <div className="flex-center mt-6">
+              <button type="submit" onClick={onSubscribe} disabled={!cateSeleted.length}
                 className="px-3 lg:px-10 py-1.5 outline-none text-white bg-primary-orange rounded-20 font-apoc"
               >Submit</button>
             </div>
