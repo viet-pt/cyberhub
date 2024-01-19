@@ -30,14 +30,15 @@ const ChartColumn = ({ number, data }) => {
         },
         title: {
           display: true,
-          text: 'Kết quả kiểm tra 10 lần gần đây',
+          text: 'Kết quả kiểm tra gần đây',
         },
       },
       scales: {
         y: {
           min: 0,
           max: number,
-        }
+        },
+        
       }
     }
   ), [number])
@@ -50,6 +51,8 @@ const ChartColumn = ({ number, data }) => {
           label: 'Điểm số',
           data: data.value,
           backgroundColor: 'rgba(53, 162, 235, 0.5)',
+          barThickness: 50,
+          // barPercentage: 0.4
         },
       ],
     }}

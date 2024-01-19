@@ -2,7 +2,7 @@ import cn from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { getLink } from "utils/helpers";
+import { convertTime, getLink } from "utils/helpers";
 import { IArticle } from "utils/interface";
 
 interface Iprops {
@@ -29,7 +29,7 @@ const RelateArticle = ({ item, className }: Iprops) => {
         </Link>
 
         <div className="flex space-x-4 mt-3 text-[11px] lg:text-[12px]">
-          <p className="text-gray-400">{item.createTime}</p>
+          <p className="text-gray-400">{convertTime(item.createTime)}</p>
           <p className="uppercase">{item.cateName}</p>
         </div>
 

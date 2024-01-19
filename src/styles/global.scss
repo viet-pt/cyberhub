@@ -294,3 +294,16 @@ input[type="number"] {
     @apply flex justify-center;
   }
 }
+
+.content {
+  p, div, span {
+    line-height: 28px;
+  }
+  h2, h3 {
+    line-height: 32px;
+  }
+  img, table {
+    width: 100%;
+    margin: 12px 0;
+  }
+}

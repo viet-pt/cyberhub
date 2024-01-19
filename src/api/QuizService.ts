@@ -11,6 +11,11 @@ export const QuizService = {
     return getRequestShowLoading(URL, data, successCallback, failCallback);
   },
 
+  getCategoryQuiz: function (data, successCallback, failCallback?: Function) {
+    const URL = `/question/category/public/`;
+    return getRequestShowLoading(URL, data, successCallback, failCallback);
+  },
+
   submitTest: function (data, successCallback, failCallback?: Function) {
     const URL = '/question/question/submit/';
     return postRequestShowLoading(URL, data, {}, successCallback, failCallback);

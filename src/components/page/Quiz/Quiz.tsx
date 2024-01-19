@@ -7,7 +7,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { useCateStore } from "store/storeCate";
 import { ROUTE } from "utils/constants";
 import { storageKey } from "utils/storageKey";
 
@@ -58,7 +57,6 @@ const Quiz = () => {
   const [formInfo] = Form.useForm();
   const [form] = Form.useForm();
   const router = useRouter();
-  const [cateStore] = useCateStore((state) => [state.data]);
 
   useEffect(() => {
     const curentType = router.query.type;
@@ -73,13 +71,17 @@ const Quiz = () => {
   }, [router.query])
 
   useEffect(() => {
-    if (cateStore.length) {
+    getCategoryQuiz();
+  }, [])
+
+  const getCategoryQuiz = () => {
+    QuizService.getCategoryQuiz({}, res => {
       setCateList([
         { cateId: '', cateName: 'Tất cả' },
-        ...cateStore,
+        ...res,
       ]);
-    }
-  }, [cateStore])
+    })
+  }
 
   const onSubmit = () => {
     const values = form.getFieldsValue();
@@ -227,7 +229,7 @@ const Quiz = () => {
                     <p className="mb-6 text-center font-bold text-xl">THÔNG TIN BÀI THI</p>
                     <div className="mb-3 flex items-center">
                       <span className="w-1/3">Thể loại:</span>
-                      <Form.Item name='cateId' className="w-1/3 ml-4 mb-0">
+                      <Form.Item name='cateId' className="w-1/2 ml-4 mb-0">
                         <Select placeholder="Chọn chủ đề" className='rounded-md' showSearch={false}>
                           {cateList.map(item => (
                             <Select.Option value={item.cateId} key={item.cateId}>{item.cateName}</Select.Option>

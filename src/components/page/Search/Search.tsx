@@ -14,9 +14,16 @@ const Search = ({ searchTxt, data }: Iprops) => {
       <p>Từ khóa: <b>{searchTxt}</b></p>
 
       <div className="lg:w-3/5 mt-8">
-        {data.map((item, index) => (
-          <RelateArticle item={item} key={index} />
-        ))}
+        {data?.length ?
+          <>
+            {data.map((item, index) => (
+              <RelateArticle item={item} key={index} />
+            ))}
+          </> :
+          <div className="text-center bg-gray-100 text-xl py-10">
+            Không tìm thấy kết quả
+          </div>
+        }
       </div>
     </div>
   );

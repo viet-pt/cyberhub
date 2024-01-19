@@ -14,7 +14,7 @@ import { convertTime } from "utils/helpers";
 const TAB_LIST = ['Thông tin cá nhân', ' Tin tức', 'Câu hỏi'];
 
 const Profile = () => {
-  const [tab, setTab] = useState(2);
+  const [tab, setTab] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
   const [questionList, setQuestionList] = useState<any>([]);
   const [newsList, setNewsList] = useState<any>([]);
@@ -62,15 +62,16 @@ const Profile = () => {
     })
   }
 
-  const getDataChart = (number?: number) => {
-    const label = ['19/01/2024 22:33', '19/01/2024 20:15', '18/01/2024 21:22', '1701/2024 21:22', '16/01/2024 21:22',
-      '15/01/2024 21:22', '14/01/2024 21:22', '13/01/2024 21:22', '12/01/2024 21:22', '11/01/2024 21:22'];
-    const value = [1, 3, 5, 2, 4, 6, 9, 1, 8, 2];
-    setDataChart({ label, value });
-
-    // UserService.getHistory({ number: number || numbValue }, res => {
-    //   setDataChart(res);
-    // })
+  const getDataChart = (questionNum?: number) => {
+    const params = { questionNum: questionNum || numbValue };
+    UserService.getDataChart({ params }, res => {
+      let label: any = [], value: any = [];
+      res.forEach(item => {
+        label.push(convertTime(item.created, 'DD/MM/YYYY HH:mm'));
+        value.push(item.score);
+      });
+      setDataChart({ label, value });
+    })
   }
 
   const viewDetail = (data) => {
@@ -194,8 +195,8 @@ const Profile = () => {
               <div className="grid grid-cols-2 mt-5">
                 <div className="flex items-center">
                   <Image
-                    alt='avatar'
-                    src={userStore?.imageUrl || 'https://upload.wikimedia.org/wikipedia/vi/thumb/e/ef/Logo_%C4%90%E1%BA%A1i_h%E1%BB%8Dc_B%C3%A1ch_Khoa_H%C3%A0_N%E1%BB%99i.svg/1200px-Logo_%C4%90%E1%BA%A1i_h%E1%BB%8Dc_B%C3%A1ch_Khoa_H%C3%A0_N%E1%BB%99i.svg.png'}
+                    alt={userInfo.name}
+                    src={userStore?.imageUrl || ''}
                     className='h-12 w-auto aspect-[1/1] rounded-full'
                     width={0} height={0}
                   />

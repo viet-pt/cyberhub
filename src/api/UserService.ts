@@ -27,7 +27,7 @@ export const UserService = {
   },
 
   getDataChart: function (data, successCallback, failCallback?: Function) {
-    const URL = `/question/chart/`;
+    const URL = `/user/quiz_history/chart/`;
     return getRequestShowLoading(URL, data, successCallback, failCallback);
   },
 
