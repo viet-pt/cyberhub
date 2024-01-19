@@ -1,7 +1,8 @@
+import ChartColumn from "@common/Chart/ChartColumn";
 import KCSModal from "@common/Modal/KCSModal";
 import Modal from "@common/Modal/Modal";
 import QuizView from "@common/QuizDetail/QuizView";
-import { Form, Table, Tabs } from "antd";
+import { Form, Select, Table, Tabs } from "antd";
 import { UserService } from "api/UserService";
 import clsx from "clsx";
 import Image from "next/image";
@@ -13,7 +14,7 @@ import { convertTime } from "utils/helpers";
 const TAB_LIST = ['Thông tin cá nhân', ' Tin tức', 'Câu hỏi'];
 
 const Profile = () => {
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState(2);
   const [pageIndex, setPageIndex] = useState(0);
   const [questionList, setQuestionList] = useState<any>([]);
   const [newsList, setNewsList] = useState<any>([]);
@@ -22,8 +23,10 @@ const Profile = () => {
   const [quizDetail, setQuizDetail] = useState<any>('');
   const [showQuizDetail, setShowQuizDetail] = useState(false);
   const [userInfo, setUserInfo] = useState<any>('');
-  const [userStore] = useUserStore((state) => [state.data]);
+  const [numbValue, setNumbValue] = useState(10);
+  const [dataChart, setDataChart] = useState<any>('');
 
+  const [userStore] = useUserStore((state) => [state.data]);
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -33,6 +36,7 @@ const Profile = () => {
       getSubscribeInfo();
     } else {
       getHistory();
+      getDataChart();
     }
   }, [tab]);
 
@@ -56,6 +60,17 @@ const Profile = () => {
     UserService.getHistory({}, res => {
       setQuestionList(res);
     })
+  }
+
+  const getDataChart = (number?: number) => {
+    const label = ['19/01/2024 22:33', '19/01/2024 20:15', '18/01/2024 21:22', '1701/2024 21:22', '16/01/2024 21:22',
+      '15/01/2024 21:22', '14/01/2024 21:22', '13/01/2024 21:22', '12/01/2024 21:22', '11/01/2024 21:22'];
+    const value = [1, 3, 5, 2, 4, 6, 9, 1, 8, 2];
+    setDataChart({ label, value });
+
+    // UserService.getHistory({ number: number || numbValue }, res => {
+    //   setDataChart(res);
+    // })
   }
 
   const viewDetail = (data) => {
@@ -150,10 +165,15 @@ const Profile = () => {
     ]
   ), [handleUnSubcribe, pageIndex])
 
+  const onChangeNumber = (value) => {
+    setNumbValue(value);
+    getDataChart(value);
+  }
+
   return (
     <div className="text-base container pt-4 lg:pt-10 mobile:px-2">
-      <div className="md:flex">
-        <ul className="flex-column space-y space-y-2 lg:space-y-4 text-sm text-gray-700 font-semibold dark:text-gray-400 md:me-4 mb-4 md:mb-0">
+      <div className="lg:flex">
+        <ul className="flex-column space-y space-y-2 lg:space-y-4 text-sm text-gray-700 font-semibold dark:text-gray-400 md:me-4 mb-4 md:mb-0 w-full md:w-1/5 lg:w-1/6">
           {TAB_LIST.map((item, index) => (
             <li onClick={() => setTab(index)}>
               <div className={clsx("inline-flex items-center pointer px-4 py-3 rounded-lg hover:opacity-80 w-full",
@@ -164,7 +184,7 @@ const Profile = () => {
           ))}
         </ul>
 
-        <div className="p-2 lg:p-6 pb-32 bg-gray-50 text-gray-800 dark:text-gray-400 dark:bg-gray-800 rounded-lg lg:w-4/5">
+        <div className="p-2 lg:p-6 pb-32 bg-gray-50 text-gray-800 dark:text-gray-400 dark:bg-gray-800 rounded-lg w-full">
           {tab === 0 ?
             <section>
               <div className="font-semibold flex-between py-3 border-b">
@@ -228,9 +248,20 @@ const Profile = () => {
                   },
                   {
                     key: '2',
-                    label: <span className="py-3 text-gray-800 text-base">Biểu đồ thi</span>,
+                    label: <span className="py-3 text-gray-800 text-base">Biểu đồ kết quả</span>,
                     children: <div className="mt-5">
-
+                      <div className="flex items-center">
+                        <span className="mr-4">Số lượng câu hỏi:</span>
+                        <Select className='rounded-md w-16' showSearch={false} onChange={onChangeNumber} value={numbValue}>
+                          {[10, 30].map(item => (
+                            <Select.Option value={item} key={item}>{item}</Select.Option>
+                          ))}
+                        </Select>
+                      </div>
+                      <ChartColumn
+                        number={numbValue}
+                        data={dataChart}
+                      />
                     </div>
                   },
                 ]}

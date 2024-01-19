@@ -11,6 +11,10 @@ const Home = ({ hotNews, cateList }) => {
   return (
     <div className="mt-4">
       <section className="container mobile:px-2">
+        <div className="flex space-x-4 justify-end mb-5">
+          <Link href={'/'} className="rounded-20 px-5 py-2 bg-primary-orange text-white font-semibold shadow-5">#Trending</Link>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-7 gap-4 lg:gap-8">
           <div className="lg:col-span-2 order-last lg:order-none">
             {hotNews.length > 4 &&

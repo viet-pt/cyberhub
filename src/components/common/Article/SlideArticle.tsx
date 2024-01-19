@@ -12,13 +12,13 @@ interface Iprops {
 
 const SlideArticle = ({ item, className }: Iprops) => {
   return (
-    <article className={cn('group hover-news pointer mb-6 rounded-lg border pb-2', className)}>
+    <article className={cn('group hover-news pointer mb-4 rounded-lg border pb-3', className)}>
       <div className="overflow-hidden rounded-t-lg">
         <Link href={getLink(item)}>
           <Image
             alt={item.title}
             src={item.thumbnail}
-            className='w-full h-auto aspect-[5/3] rounded-t-lg pointer'
+            className='w-full h-auto aspect-[3/2] rounded-t-lg pointer'
             width={0} height={0}
           />
         </Link>

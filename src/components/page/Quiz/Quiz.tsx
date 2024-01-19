@@ -16,7 +16,7 @@ const TYPE = {
   TEST: 'TEST',
 }
 
-const TIME_1_Q = 10;
+const TIME_1_Q = 60;
 
 const CountTime = ({ reCountTime, totalTime, endTime }) => {
   const [counter, setCounter] = React.useState(totalTime);
