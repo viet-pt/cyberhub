@@ -1,7 +1,7 @@
-import React, { Fragment, memo, useEffect, useState } from 'react';
-import { Combobox, Transition } from '@headlessui/react';
 import IconArrowDown from '@common/Icons/IconArrowDown';
+import { Combobox, Transition } from '@headlessui/react';
 import cn, { clsx } from 'clsx';
+import { Fragment, memo, useEffect, useState } from 'react';
 import useTrans from 'utils/useTrans';
 
 type OptionType = {
@@ -43,11 +43,11 @@ const Dropdown = ({ value, label, list, onChange, error, className }: IProps) =>
   return (
     <div>
       <Combobox onChange={handleChange} nullable>
-        <div className={clsx("relative", className)}>
-          <Combobox.Button className="flex w-full items-center py-2">
+        <div className={clsx("relative dropd", className)}>
+          <Combobox.Button className="flex-between w-full min-w-[160px] border py-2 px-4">
             <span>{i18n[txt] || txt || i18n[label] || label}</span>
             <IconArrowDown
-              className="ml-2 -mr-1 h-2.5"
+              className="ml-2 -mr-1 h-2.5 text-primary-orange"
               aria-hidden="true"
             />
           </Combobox.Button>
@@ -61,12 +61,12 @@ const Dropdown = ({ value, label, list, onChange, error, className }: IProps) =>
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Combobox.Options className="absolute mt-1 w-full min-w-[120px] max-h-60 overflow-auto rounded-[4px] bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <Combobox.Options className="absolute mt-1 w-full min-w-[200px] max-h-60 z-10 overflow-auto rounded-[4px] bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               <div className="px-1 py-1">
                 {list.length ? list.map(item => (
                   <Combobox.Option key={item.value} value={item}>
                     {({ active }) => (
-                      <div className={cn(active ? 'bg-violet-500 text-white' : 'text-gray-900',
+                      <div className={cn(active ? 'bg-primary-orange text-white' : 'text-gray-900',
                         'group flex w-full items-center cursor-pointer rounded-[4px] px-2 py-2 text-sm')}
                       >{i18n[item.label] || item.label}</div>
                     )}

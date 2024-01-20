@@ -1,8 +1,8 @@
 import HorizontalArticle from "@common/Article/HorizontalArticle";
 import MainArticle from "@common/Article/MainArticle";
 import VerticalArticle from "@common/Article/VerticalArticle";
+import Dropdown from "@common/Dropdown/Dropdown";
 import Slider from "@common/Slider";
-import { Select } from "antd";
 import Link from "next/link";
 import Router from "next/router";
 import React, { useEffect, useState } from "react";
@@ -16,16 +16,17 @@ const Home = ({ hotNews, cateList }) => {
 
   useEffect(() => {
     if (cateStore.length) {
-      setCates([
-        { cateId: '', cateName: 'Tất cả danh mục' },
-        ...cateStore,
-      ]);
+      let list = cateStore.map(item => ({
+        value: item.cateId,
+        label: item.cateName
+      }))
+      setCates(list);
     }
   }, [cateStore])
 
-  const changeCate = (value, item) => {
-    if (value !== '') {
-      Router.push(`${ROUTE.CATEGORY}/${replaceCate(item.children)}`);
+  const changeCate = (item: any) => {
+    if (item.value !== '') {
+      Router.push(`${ROUTE.CATEGORY}/${replaceCate(item.label)}`);
     }
   }
 
@@ -33,12 +34,18 @@ const Home = ({ hotNews, cateList }) => {
     <div className="mt-4">
       <section className="container mobile:px-2">
         <div className="flex space-x-4 justify-end mb-5">
-          <Select placeholder="Chọn chủ đề" className='w-44 shadow-5' showSearch={false} defaultValue='' onChange={changeCate}>
+          <Dropdown
+            label="Tất cả danh mục"
+            list={cates} className="shadow-5"
+            onChange={changeCate}
+          />
+          {/* <Select placeholder="Chọn chủ đề" className='w-44 shadow-5' showSearch={false} defaultValue='' onChange={changeCate}>
             {cates.map(item => (
               <Select.Option value={item.cateId} key={item.cateId}>{item.cateName}</Select.Option>
             ))}
-          </Select>
-          <Link href={`${ROUTE.CATEGORY}/trending`} className="px-5 py-1.5 bg-primary-orange text-white font-semibold shadow-5 hover:no-underline hover-raise ml-4">Trending</Link>
+          </Select> */}
+          <Link href={`${ROUTE.CATEGORY}/trending`}
+            className="px-5 py-1.5 bg-primary-orange text-white font-semibold shadow-5 hover:no-underline flex-center hover-raise ml-4">Trending</Link>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-7 gap-4 lg:gap-8">
