@@ -24,7 +24,7 @@ const MainArticle = ({ item, className }: Iprops) => {
         </Link>
       </div>
       <Link href={getLink(item)} className="hover:no-underline">
-        <h4 className={cn('font-bold mt-4 mb-4 text-2xl lg:text-4xl text-second-black line-clamp-2 max-h-15 lg:max-h-[82px] group-hover:text-primary-blue')}>
+        <h4 className={cn('font-bold mt-4 mb-4 text-2xl lg:text-4xl lg:leading-[2.8rem] text-second-black line-clamp-2 max-h-15 lg:max-h-[90px] group-hover:text-primary-blue')}>
           {item.title}</h4>
       </Link>
       <p className={cn('mb-0 text-gray-400 line-clamp-3 h-13 lg:h-16 hidden lg:block')}>
