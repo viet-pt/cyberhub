@@ -30,7 +30,7 @@ const QuizDetail = ({ data, index, isSuccess, result, isMulti }) => {
   )
 
   return (
-    <div className={cn('mb-5 border-2 border-primary-orange px-6 pt-10 pb-2 relative rounded-md')}>
+    <div className={cn('mb-5 border-2 border-primary-orange px-4 pt-10 pb-2 relative rounded-md')}>
       <div className='border-b-2 border-r-2 rounded-br-md border-primary-orange absolute top-0 left-0 px-2 py-1 flex-center'>
         <IconCate className="text-primary-orange w-4 mr-2" />
         <span className='font-semibold text-xs text-primary-orange italic capitalize'>{data.cateName || 'General'}</span>

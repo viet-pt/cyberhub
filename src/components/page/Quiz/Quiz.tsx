@@ -38,7 +38,7 @@ const CountTime = ({ reCountTime, totalTime, endTime }) => {
   seconds = seconds < 10 ? `0${seconds}` : seconds;
 
   return (
-    <span className='text-red-600 font-bold text-xl'>{minutes} : {seconds}</span>
+    <span className='text-red-600 font-bold text-3xl'>{minutes} : {seconds}</span>
   )
 }
 
@@ -48,6 +48,7 @@ const Quiz = () => {
   const [openConfirmSubmit, setOpenConfirmSubmit] = useState(false);
   const [totalQuestion, setTotalQuestion] = useState(0);
   const [questionDone, setQuestionDone] = useState(0);
+  const [quizSelected, setQuizSelected] = useState<any>([]);
   const [questionList, setQuestionList] = useState<any>([]);
   const [cateList, setCateList] = useState<any>([]);
   const [reCountTime, setReCountTime] = useState(0);
@@ -125,13 +126,10 @@ const Quiz = () => {
     }
     setReCountTime(reCountTime + 1);
 
-    // setQuestionDone(0);
-    // setIsSuccess(false);
-    // setQuestionList(FAKE);
-
     QuizService.getQuestionList({ params }, res => {
       if (res?.length) {
         setQuestionDone(0);
+        setQuizSelected([]);
         setIsSuccess(false);
         setQuestionList(res);
       }
@@ -175,14 +173,18 @@ const Quiz = () => {
 
   const onChangeQuiz = (data, values) => {
     let number = 0;
+    let arrSelected: number[] = [];
     for (const [index, item] of Object.entries(values) as any) {
       if (typeof item?.answer === "string") {
+        arrSelected.push(Number(index));
         number++;
       } else if (Array.isArray(item.answer) && item.answer.length) {
+        arrSelected.push(Number(index));
         number++;
       }
     }
     setQuestionDone(number);
+    setQuizSelected(arrSelected);
   }
 
   const onSubmitInfo = () => {
@@ -282,23 +284,32 @@ const Quiz = () => {
                 </div>
 
                 {!isSuccess ?
-                  <div className="w-full lg:w-1/5 mx-auto mt-10 text-center order-first lg:order-none grid lg:block mobile:space-x-4 sticky top-0">
-                    <div className="border mb-4 border-primary-orange py-1 px-4 rounded-md text-base">
-                      <span>Đã làm:</span>
-                      <span className="text-xl text-red-600 ml-1 font-bold">{questionDone} / {totalQuestion}</span>
-                    </div>
-                    <div className="border mb-4 border-primary-orange py-1 px-4 rounded-md text-base">
-                      <span className="mr-1">Thời gian còn lại:</span>
-                      <span>
+                  <div className="w-full lg:w-1/5 mx-auto mt-10 text-center order-first lg:order-none grid lg:block mobile:space-x-4 lg:sticky lg:h-60 top-32">
+                    <div>
+                      <div className="border mb-4 border-primary-orange py-1 px-4 rounded-md text-base">
                         <CountTime
                           reCountTime={reCountTime}
                           endTime={handleEndTime}
                           totalTime={totalQuestion * TIME_1_Q}
                         />
-                      </span>
+                      </div>
                     </div>
-                    <div className="col-span-2 lg:mt-10">
-                      <button className="rounded-md bg-primary-red text-white py-2 px-8 w-1/3 lg:w-auto hover-slide" onClick={() => setOpenConfirmSubmit(true)}>
+                    {/* <div className="border mb-4 border-primary-orange py-1 px-4 rounded-md text-base">
+                          <span>Đã làm:</span>
+                          <span className="text-xl text-red-600 ml-1 font-bold">{questionDone} / {totalQuestion}</span>
+                        </div> */}
+
+                    {totalQuestion > 1 &&
+                      <div className="grid grid-cols-5 gap-2 px-2">
+                        {Array.from(Array(totalQuestion)).map((item, i) => (
+                          <div className={cn("w-9 h-8 flex-center text-white font-semibold", quizSelected.includes(i) ? 'bg-blue-700' : 'bg-gray-400')}>
+                            {i + 1}</div>
+                        ))}
+                      </div>
+                    }
+
+                    <div className="col-span-2 mt-5 lg:mt-10">
+                      <button className="rounded-md bg-primary-red text-white py-2 px-8 w-1/2 lg:w-auto hover-slide" onClick={() => setOpenConfirmSubmit(true)}>
                         Nộp bài</button>
                     </div>
                   </div> :
